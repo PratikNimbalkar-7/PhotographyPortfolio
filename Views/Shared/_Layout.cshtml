@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - Photography Portfolio</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="/css/site.css" />
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light mb-3">
+        <div class="container">
+            <a class="navbar-brand" href="/">Photography</a>
+            <div class="collapse navbar-collapse">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item"><a class="nav-link" href="/">Home</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/Home/About">About</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/Home/Contact">Contact</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/Admin/Login">Admin</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        @RenderBody()
+    </div>
+
+    <footer class="text-center mt-5 mb-3">
+        &copy; @DateTime.UtcNow.Year Photography Portfolio
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

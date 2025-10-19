@@ -1,0 +1,87 @@
+@{
+    ViewData["Title"] = "Contact";
+}
+
+<section class="py-5 bg-light">
+    <div class="container">
+        <div class="text-center mb-5">
+            <h2 class="fw-bold text-primary">Get in Touch</h2>
+            <p class="text-muted fs-5">I'd love to hear from you! Whether you’re planning a shoot or just want to say hello — feel free to reach out.</p>
+        </div>
+
+        <div class="row g-5">
+            <!-- Contact Info -->
+            <div class="col-lg-4">
+                <div class="card shadow-sm border-0 mb-4">
+                    <div class="card-body text-center">
+                        <i class="fa fa-map-marker fa-3x text-primary mb-3"></i>
+                        <h5 class="fw-bold">Address</h5>
+                        <p class="text-muted mb-0">Pune, Maharashtra, India</p>
+                    </div>
+                </div>
+
+                <div class="card shadow-sm border-0 mb-4">
+                    <div class="card-body text-center">
+                        <i class="fa fa-phone fa-3x text-success mb-3"></i>
+                        <h5 class="fw-bold">Phone</h5>
+                        <p class="text-muted mb-0">+91 98765 43210</p>
+                    </div>
+                </div>
+
+                <div class="card shadow-sm border-0">
+                    <div class="card-body text-center">
+                        <i class="fa fa-envelope fa-3x text-danger mb-3"></i>
+                        <h5 class="fw-bold">Email</h5>
+                        <p class="text-muted mb-0">contact@pratikphotography.com</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Contact Form -->
+            <div class="col-lg-8">
+                <div class="card shadow-lg border-0 rounded-4">
+                    <div class="card-body p-4">
+                        <h4 class="fw-bold mb-4 text-primary">Send a Message</h4>
+
+                        <form asp-action="Contact" method="post">
+                            <div class="mb-3">
+                                <label class="form-label fw-semibold">Your Name</label>
+                                <input type="text" class="form-control form-control-lg" placeholder="Enter your name" required>
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label fw-semibold">Email Address</label>
+                                <input type="email" class="form-control form-control-lg" placeholder="Enter your email" required>
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label fw-semibold">Subject</label>
+                                <input type="text" class="form-control form-control-lg" placeholder="Subject" required>
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label fw-semibold">Message</label>
+                                <textarea class="form-control form-control-lg" rows="5" placeholder="Write your message here..." required></textarea>
+                            </div>
+
+                            <button type="submit" class="btn btn-primary px-5 py-2 rounded-pill">
+                                <i class="fa fa-paper-plane me-2"></i> Send Message
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Map Section -->
+<section class="mt-5">
+    <div class="container-fluid px-0">
+        <div class="ratio ratio-16x9">
+            <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3782.1808132191765!2d73.85674331537109!3d18.520430687408134!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3bc2c068dfb4c0b3%3A0x1a1eaaae2f03f38!2sPune%2C%20Maharashtra!5e0!3m2!1sen!2sin!4v1697012345678!5m2!1sen!2sin"
+                    width="100%" height="450" style="border:0;" allowfullscreen="" loading="lazy">
+            </iframe>
+        </div>
+    </div>
+</section>

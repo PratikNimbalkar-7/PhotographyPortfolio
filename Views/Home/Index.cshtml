@@ -1,0 +1,42 @@
+@model IEnumerable<PhotographyPortfolio.Models.Photo>
+@{
+    ViewData["Title"] = "Gallery";
+    var cats = ViewBag.Categories as List<PhotographyPortfolio.Models.Category>;
+}
+
+@if (cats != null && cats.Any())
+{
+    foreach (var category in cats)
+    {
+        var photosInCategory = Model.Where(p => p.CategoryId == category.Id).ToList();
+
+        if (photosInCategory.Any())
+        {
+            <div class="mb-5">
+                <h3 class="fw-bold mb-3 border-bottom pb-2">@category.Name</h3>
+
+                <div class="row">
+                    @foreach (var p in photosInCategory)
+                    {
+                        <div class="col-sm-6 col-md-4 col-lg-3 mb-4">
+                            <div class="card shadow-sm border-0 h-100">
+                                <img src="@p.ImagePath" class="card-img-top" style="height:220px; object-fit:cover;" alt="@p.Title" />
+                                <div class="card-body text-center">
+                                    <h5 class="card-title fw-semibold">@p.Title</h5>
+                                    <p class="card-text text-muted">@p.Description</p>
+                                    <a href="/Home/Details/@p.Id" class="btn btn-sm btn-primary rounded-pill">
+                                        <i class="fa fa-eye me-1"></i> View
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+        }
+    }
+}
+else
+{
+    <div class="alert alert-warning">No categories or photos found.</div>
+}

@@ -1,0 +1,14 @@
+@model PhotographyPortfolio.Models.Photo
+@{
+    ViewData["Title"] = Model.Title;
+}
+<div class="row">
+    <div class="col-md-8">
+        <img src="@Model.ImagePath" class="img-fluid" />
+    </div>
+    <div class="col-md-4">
+        <h3>@Model.Title</h3>
+        <p>@Model.Description</p>
+        <p><strong>Category:</strong> @Model.Category?.Name</p>
+    </div>
+</div>

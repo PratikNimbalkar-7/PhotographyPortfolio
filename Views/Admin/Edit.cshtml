@@ -1,0 +1,18 @@
+@model PhotographyPortfolio.Models.Photo
+@{
+    ViewData["Title"] = "Edit Photo";
+    var cats = ViewBag.Categories as List<PhotographyPortfolio.Models.Category>;
+}
+<h3>Edit Photo</h3>
+<form method="post" enctype="multipart/form-data">
+    <div class="mb-2"><input class="form-control" name="Title" value="@Model.Title" /></div>
+    <div class="mb-2"><textarea class="form-control" name="Description">@Model.Description</textarea></div>
+    <div class="mb-2">
+        <select name="CategoryId" class="form-select">
+            <option value="">-- Select Category --</option>
+            @foreach(var c in cats) { <option value="@c.Id" @(Model.CategoryId==c.Id?"selected":"")>@c.Name</option> }
+        </select>
+    </div>
+    <div class="mb-2"><input type="file" name="image" class="form-control" /></div>
+    <button class="btn btn-success">Save</button>
+</form>

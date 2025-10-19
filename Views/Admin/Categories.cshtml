@@ -1,0 +1,27 @@
+@model IEnumerable<PhotographyPortfolio.Models.Category>
+@{
+    ViewData["Title"] = "Manage Categories";
+}
+<h3>Categories</h3>
+<form method="post" action="/Admin/AddCategory" class="mb-3 d-flex">
+    <input name="name" class="form-control me-2" placeholder="New category" />
+    <button class="btn btn-primary">Add</button>
+</form>
+
+<table class="table">
+    <thead><tr><th>Id</th><th>Name</th><th></th></tr></thead>
+    <tbody>
+        @foreach(var c in Model)
+        {
+            <tr>
+                <td>@c.Id</td>
+                <td>@c.Name</td>
+                <td>
+                    <form method="post" action="/Admin/DeleteCategory/@c.Id" onsubmit="return confirm('Delete category?');">
+                        <button class="btn btn-sm btn-danger">Delete</button>
+                    </form>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
