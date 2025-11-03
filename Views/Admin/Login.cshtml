@@ -1,14 +1,58 @@
 @{
     ViewData["Title"] = "Admin Login";
 }
-<div class="row justify-content-center">
-    <div class="col-md-4">
-        <h3>Admin Login</h3>
-        @if(ViewBag.Error != null) { <div class="alert alert-danger">@ViewBag.Error</div> }
-        <form method="post">
-            <div class="mb-2"><input class="form-control" name="username" placeholder="username" /></div>
-            <div class="mb-2"><input class="form-control" name="password" type="password" placeholder="password" /></div>
-            <button class="btn btn-primary">Login</button>
-        </form>
+
+<section class="vh-100 d-flex align-items-center justify-content-center bg-dark text-white">
+    <div class="card bg-black border-0 shadow-lg rounded-4" style="width: 400px;">
+        <div class="card-body p-4">
+            <div class="text-center mb-4">
+                <i class="fa fa-user-shield fa-3x mb-2" style="color:#00bcd4;"></i>
+                <h3 class="fw-bold" style="color:#00bcd4;">Admin Login</h3>
+                <p class="text-secondary small">Access your admin dashboard securely</p>
+            </div>
+
+            @if (ViewBag.Error != null)
+            {
+                <div class="alert alert-danger text-center">@ViewBag.Error</div>
+            }
+
+            <form method="post">
+                <div class="mb-3">
+                    <label class="form-label text-light fw-semibold">Username</label>
+                    <div class="input-group">
+                        <span class="input-group-text bg-secondary text-white border-0">
+                            <i class="fa fa-user"></i>
+                        </span>
+                        <input class="form-control bg-dark text-white border-0 border-bottom border-secondary"
+                               name="username"
+                               placeholder="Enter username"
+                               required />
+                    </div>
+                </div>
+
+                <div class="mb-4">
+                    <label class="form-label text-light fw-semibold">Password</label>
+                    <div class="input-group">
+                        <span class="input-group-text bg-secondary text-white border-0">
+                            <i class="fa fa-lock"></i>
+                        </span>
+                        <input class="form-control bg-dark text-white border-0 border-bottom border-secondary"
+                               name="password"
+                               type="password"
+                               placeholder="Enter password"
+                               required />
+                    </div>
+                </div>
+
+                <button type="submit"
+                        class="w-100 py-2 fw-bold rounded-pill border-0"
+                        style="background-color:#00bcd4; color:white;">
+                    <i class="fa fa-sign-in-alt me-2"></i> Login
+                </button>
+            </form>
+        </div>
     </div>
-</div>
+</section>
+
+<!-- Font Awesome -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />

@@ -1,14 +1,81 @@
-@model PhotographyPortfolio.Models.Photo
+﻿@model PhotographyPortfolio.Models.Photo
 @{
     ViewData["Title"] = Model.Title;
 }
-<div class="row">
-    <div class="col-md-8">
-        <img src="@Model.ImagePath" class="img-fluid" />
-    </div>
-    <div class="col-md-4">
-        <h3>@Model.Title</h3>
-        <p>@Model.Description</p>
-        <p><strong>Category:</strong> @Model.Category?.Name</p>
-    </div>
+
+<style>
+    body {
+        background-color: #0d0d0d;
+        color: #f5f5f5;
+        font-family: 'Poppins', sans-serif;
+    }
+
+    .photo-details {
+        min-height: 60vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+        text-align: center;
+        padding: 40px 0;
+    }
+
+        .photo-details img {
+            max-width: 60%;
+            height: auto;
+            border-radius: 12px;
+            box-shadow: 0 0 25px rgba(0, 188, 212, 0.4);
+            transition: transform 0.4s ease;
+            border: 1px solid #333;
+        }
+
+            .photo-details img:hover {
+                transform: scale(1.02);
+            }
+
+    h3 {
+        color: #00bcd4;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        margin-top: 20px;
+    }
+
+    p {
+        color: #ccc;
+        font-size: 1rem;
+        line-height: 1.6;
+    }
+
+    strong {
+        color: #00bcd4;
+    }
+
+    .btn-back {
+        margin-top: 30px;
+        background: linear-gradient(45deg, #00bcd4, #007bff);
+        color: white;
+        border: none;
+        padding: 10px 25px;
+        border-radius: 50px;
+        transition: all 0.3s ease;
+        text-decoration: none;
+        display: inline-block;
+        font-weight: 500;
+    }
+
+        .btn-back:hover {
+            background: linear-gradient(45deg, #007bff, #00bcd4);
+            transform: scale(1.05);
+        }
+
+    @@media (max-width: 768px) {
+        .photo-details img {
+            width: 100%;
+        }
+    }
+</style>
+
+<div class="container photo-details">
+    <img src="@Model.ImagePath" alt="@Model.Title" class="img-fluid" />
+    <h3 class="fw-bold mt-3">@Model.Title</h3>
 </div>

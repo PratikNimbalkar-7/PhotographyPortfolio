@@ -1,86 +1,211 @@
-@{
+﻿@{
     ViewData["Title"] = "Contact";
 }
 
-<section class="py-5 bg-light">
+<!-- 🌌 Modern Dark-Themed Contact Page -->
+<style>
+    body {
+        background-color: #0a0a0a;
+        color: #f5f5f5;
+        font-family: 'Poppins', sans-serif;
+        overflow-x: hidden;
+    }
+
+    section {
+        padding: 80px 0;
+    }
+
+    h2, h4, h5 {
+        color: #00bcd4;
+    }
+
+    p, label {
+        color: #ccc;
+    }
+
+    .bg-light {
+        background-color: #111 !important;
+    }
+
+    .card {
+        background-color: #1a1a1a;
+        border: 1px solid #333;
+        border-radius: 15px;
+        transition: all 0.4s ease;
+        color: #f5f5f5;
+    }
+
+        .card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 0 30px rgba(0, 188, 212, 0.3);
+        }
+
+    .icon-box {
+        background-color: #111;
+        border-radius: 50%;
+        width: 80px;
+        height: 80px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin: 0 auto 20px;
+    }
+
+        .icon-box i {
+            font-size: 2rem;
+        }
+
+    .form-control {
+        background-color: #111;
+        border: 1px solid #333;
+        color: #f5f5f5;
+        border-radius: 10px;
+        transition: all 0.3s ease;
+    }
+
+        .form-control:focus {
+            background-color: #1a1a1a;
+            border-color: #00bcd4;
+            box-shadow: 0 0 10px rgba(0, 188, 212, 0.5);
+            color: #fff;
+        }
+
+    .btn-primary {
+        background: linear-gradient(45deg, #00bcd4, #007bff);
+        border: none;
+        transition: all 0.3s ease;
+        border-radius: 50px;
+    }
+
+        .btn-primary:hover {
+            background: linear-gradient(45deg, #007bff, #00bcd4);
+            transform: scale(1.05);
+            box-shadow: 0 0 20px rgba(0, 188, 212, 0.6);
+        }
+
+    .fw-bold.text-primary {
+        color: #00bcd4 !important;
+    }
+
+    iframe {
+        filter: grayscale(100%) invert(92%) contrast(90%);
+        border: none;
+        border-radius: 10px;
+    }
+
+    .form-card {
+        background-color: #141414;
+        border-radius: 15px;
+        padding: 40px;
+        box-shadow: 0 0 30px rgba(0, 188, 212, 0.15);
+    }
+
+    .contact-info h5 {
+        margin-top: 10px;
+        font-size: 1.2rem;
+    }
+
+    @@media (max-width: 992px) {
+        .form-card
+
+    {
+        padding: 30px 20px;
+    }
+
+    h2 {
+        font-size: 1.8rem;
+    }
+
+    }</style>
+
+<!-- ✨ Contact Section -->
+<section id="contact">
     <div class="container">
+        <!-- Header -->
         <div class="text-center mb-5">
             <h2 class="fw-bold text-primary">Get in Touch</h2>
-            <p class="text-muted fs-5">I'd love to hear from you! Whether you�re planning a shoot or just want to say hello � feel free to reach out.</p>
+            <p class="text-muted fs-5">
+                Have a photography project or just want to say hello? Let’s connect and bring your vision to life.
+            </p>
         </div>
 
-        <div class="row g-5">
-            <!-- Contact Info -->
+        <div class="row g-5 align-items-start">
+            <!-- Left Side: Contact Info -->
             <div class="col-lg-4">
-                <div class="card shadow-sm border-0 mb-4">
-                    <div class="card-body text-center">
-                        <i class="fa fa-map-marker fa-3x text-primary mb-3"></i>
-                        <h5 class="fw-bold">Address</h5>
-                        <p class="text-muted mb-0">Pune, Maharashtra, India</p>
+                <div class="card text-center p-4 mb-4">
+                    <div class="icon-box">
+                        <i class="fa fa-map-marker text-primary"></i>
                     </div>
+                    <h5 class="fw-bold">Address</h5>
+                    <p class="text-primary mb-0">Pune, Maharashtra, India</p>
                 </div>
 
-                <div class="card shadow-sm border-0 mb-4">
-                    <div class="card-body text-center">
-                        <i class="fa fa-phone fa-3x text-success mb-3"></i>
-                        <h5 class="fw-bold">Phone</h5>
-                        <p class="text-muted mb-0">+91 98765 43210</p>
+                <div class="card text-center p-4 mb-4">
+                    <div class="icon-box">
+                        <i class="fa fa-phone text-success"></i>
                     </div>
+                    <h5 class="fw-bold">Phone</h5>
+                    <p class="text-primary mb-0">+91 90116 24899</p>
                 </div>
 
-                <div class="card shadow-sm border-0">
-                    <div class="card-body text-center">
-                        <i class="fa fa-envelope fa-3x text-danger mb-3"></i>
-                        <h5 class="fw-bold">Email</h5>
-                        <p class="text-muted mb-0">contact@pratikphotography.com</p>
+                <div class="card text-center p-4">
+                    <div class="icon-box">
+                        <i class="fa fa-envelope text-danger"></i>
                     </div>
+                    <h5 class="fw-bold">Email</h5>
+                    <p class="text-primary mb-0">successadvertising@gmail.com</p>
                 </div>
             </div>
 
-            <!-- Contact Form -->
+            <!-- Right Side: Contact Form -->
             <div class="col-lg-8">
-                <div class="card shadow-lg border-0 rounded-4">
-                    <div class="card-body p-4">
-                        <h4 class="fw-bold mb-4 text-primary">Send a Message</h4>
+                <div class="form-card">
+                    <h4 class="fw-bold mb-4 text-primary">📸 Photography Inquiry</h4>
 
-                        <form asp-action="Contact" method="post">
-                            <div class="mb-3">
-                                <label class="form-label fw-semibold">Your Name</label>
-                                <input type="text" class="form-control form-control-lg" placeholder="Enter your name" required>
-                            </div>
+                    <form asp-controller="Home" asp-action="Contact" method="post">
+                        @Html.AntiForgeryToken()
 
-                            <div class="mb-3">
-                                <label class="form-label fw-semibold">Email Address</label>
-                                <input type="email" class="form-control form-control-lg" placeholder="Enter your email" required>
-                            </div>
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold">Your Name</label>
+                            <input type="text" name="name" class="form-control form-control-lg" placeholder="Enter your full name" required />
+                        </div>
 
-                            <div class="mb-3">
-                                <label class="form-label fw-semibold">Subject</label>
-                                <input type="text" class="form-control form-control-lg" placeholder="Subject" required>
-                            </div>
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold">Email Address</label>
+                            <input type="email" name="email" class="form-control form-control-lg" placeholder="Enter your email" required />
+                        </div>
 
-                            <div class="mb-3">
-                                <label class="form-label fw-semibold">Message</label>
-                                <textarea class="form-control form-control-lg" rows="5" placeholder="Write your message here..." required></textarea>
-                            </div>
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold">Subject</label>
+                            <input type="text" name="subject" class="form-control form-control-lg" placeholder="e.g. Wedding Shoot Inquiry" required />
+                        </div>
 
-                            <button type="submit" class="btn btn-primary px-5 py-2 rounded-pill">
-                                <i class="fa fa-paper-plane me-2"></i> Send Message
-                            </button>
-                        </form>
-                    </div>
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold">Message</label>
+                            <textarea name="message" class="form-control form-control-lg" rows="5" placeholder="Tell us more about your photography needs..." required></textarea>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary w-100 py-3 fw-semibold">
+                            <i class="fa fa-paper-plane me-2"></i> Send Inquiry
+                        </button>
+                    </form>
                 </div>
             </div>
         </div>
     </div>
 </section>
 
-<!-- Map Section -->
+<!-- 🌍 Map Section -->
 <section class="mt-5">
     <div class="container-fluid px-0">
         <div class="ratio ratio-16x9">
-            <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3782.1808132191765!2d73.85674331537109!3d18.520430687408134!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3bc2c068dfb4c0b3%3A0x1a1eaaae2f03f38!2sPune%2C%20Maharashtra!5e0!3m2!1sen!2sin!4v1697012345678!5m2!1sen!2sin"
-                    width="100%" height="450" style="border:0;" allowfullscreen="" loading="lazy">
+            <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3784.271558735257!2d73.8448272!3d18.3435931!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3bc2931743a00579%3A0xb46cf1e7a20c9a11!2sKhed%20Shivapur-Kondanpur%20Rd%2C%20Ramnagar%2C%20Maharashtra%20412205!5e0!3m2!1sen!2sin!4v1730397825000!5m2!1sen!2sin"
+                    width="100%"
+                    height="450"
+                    style="border:0;"
+                    allowfullscreen=""
+                    loading="lazy"
+                    referrerpolicy="no-referrer-when-downgrade">
             </iframe>
         </div>
     </div>

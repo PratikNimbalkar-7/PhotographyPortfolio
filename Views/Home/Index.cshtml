@@ -4,39 +4,97 @@
     var cats = ViewBag.Categories as List<PhotographyPortfolio.Models.Category>;
 }
 
-@if (cats != null && cats.Any())
-{
-    foreach (var category in cats)
-    {
-        var photosInCategory = Model.Where(p => p.CategoryId == category.Id).ToList();
+<style>
+    body {
+        background-color: #0d0d0d;
+        color: #f5f5f5;
+        font-family: 'Poppins', sans-serif;
+    }
 
-        if (photosInCategory.Any())
+    h1 {
+        color: #00bcd4;
+    }
+
+    .card {
+        background-color: #1a1a1a;
+        border: 1px solid #333;
+        transition: all 0.3s ease;
+        border-radius: 10px;
+    }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 0 20px rgba(0, 188, 212, 0.4);
+        }
+
+        .card img, .card video {
+            border-bottom: 1px solid #333;
+            transition: transform 0.3s ease;
+            height: 220px;
+            object-fit: cover;
+            border-radius: 10px 10px 0 0;
+            width: 100%;
+        }
+
+            .card img:hover, .card video:hover {
+                transform: scale(1.05);
+            }
+
+    .card-body {
+        text-align: center;
+    }
+
+    .btn-primary {
+        background: linear-gradient(45deg, #00bcd4, #007bff);
+        border: none;
+        border-radius: 50px;
+        transition: all 0.3s ease;
+    }
+
+        .btn-primary:hover {
+            background: linear-gradient(45deg, #007bff, #00bcd4);
+            transform: scale(1.05);
+        }
+
+    .gallery-section {
+        padding: 50px 0;
+    }
+
+    h3 {
+        color: #00bcd4;
+        margin-top: 10px;
+    }
+
+    hr.section-divider {
+        border: 0;
+        border-top: 1px solid #333;
+        margin: 60px 0;
+    }
+</style>
+
+<div class="container gallery-section">
+    <!-- Photos Section -->
+    <h1 class="text-center mb-5">Photo Gallery</h1>
+
+    <div class="row">
+        @foreach (var photo in Model)
         {
-            <div class="mb-5">
-                <h3 class="fw-bold mb-3 border-bottom pb-2">@category.Name</h3>
-
-                <div class="row">
-                    @foreach (var p in photosInCategory)
-                    {
-                        <div class="col-sm-6 col-md-4 col-lg-3 mb-4">
-                            <div class="card shadow-sm border-0 h-100">
-                                <img src="@p.ImagePath" class="card-img-top" style="height:220px; object-fit:cover;" alt="@p.Title" />
-                                <div class="card-body text-center">
-                                    <h5 class="card-title fw-semibold">@p.Title</h5>
-                                    <p class="card-text text-muted">@p.Description</p>
-                                    <a href="/Home/Details/@p.Id" class="btn btn-sm btn-primary rounded-pill">
-                                        <i class="fa fa-eye me-1"></i> View
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-                    }
+            var category = cats.FirstOrDefault(c => c.Id == photo.CategoryId);
+            <div class="col-sm-6 col-md-4 col-lg-3 mb-4">
+                <div class="card shadow-sm border-0 h-100">
+                    <a asp-action="CategoryPhotos" asp-route-id="@photo.CategoryId">
+                        <img src="@photo.ImagePath" class="card-img-top" alt="@photo.Title" />
+                    </a>
+                    <div class="card-body">
+                        <h3 class="fw-bold">@category?.Name</h3>
+                        <a href="@Url.Action("CategoryPhotos", "Home", new { id = photo.CategoryId })"
+                           class="btn btn-sm btn-primary mt-2">
+                            <i class="fa fa-images me-1"></i> View All
+                        </a>
+                    </div>
                 </div>
             </div>
         }
-    }
-}
-else
-{
-    <div class="alert alert-warning">No categories or photos found.</div>
-}
+    </div>
+
+</div>

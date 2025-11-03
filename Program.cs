@@ -9,7 +9,10 @@ builder.Services.AddControllersWithViews();
 
 // Configure DB (connection string in appsettings.json)
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"))
+           .ConfigureWarnings(w => w.Ignore(Microsoft.EntityFrameworkCore.Diagnostics.RelationalEventId.PendingModelChangesWarning))
+);
+
 
 // Simple session-based auth
 builder.Services.AddDistributedMemoryCache();
@@ -19,6 +22,11 @@ builder.Services.AddSession(options => {
     options.Cookie.HttpOnly = true;
     options.Cookie.IsEssential = true;
 });
+builder.Services.Configure<MailSettings>(
+    builder.Configuration.GetSection("MailSettings"));
+
+builder.Services.AddTransient<PhotographyPortfolio.Services.MailService>();
+
 
 var app = builder.Build();
 
@@ -27,12 +35,12 @@ var uploadPath = Path.Combine(app.Environment.ContentRootPath, "wwwroot", "uploa
 if (!Directory.Exists(uploadPath)) Directory.CreateDirectory(uploadPath);
 
 // Apply migrations on startup (for dev convenience)
-using (var scope = app.Services.CreateScope())
-{
-    var db = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
-    db.Database.Migrate();
-    DbSeeder.EnsureSeedData(db, app.Environment);
-}
+//using (var scope = app.Services.CreateScope())
+//{
+//    var db = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+//    db.Database.Migrate();
+//    DbSeeder.EnsureSeedData(db, app.Environment);
+//}
 
 if (!app.Environment.IsDevelopment())
 {
