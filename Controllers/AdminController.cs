@@ -59,26 +59,79 @@ namespace PhotographyPortfolio.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create(Photo model, IFormFile image)
+        public async Task<IActionResult> Create(Photo model, List<IFormFile> images)
         {
             if (!IsLoggedIn) return RedirectToAction("Login");
-            if (!ModelState.IsValid) { ViewBag.Categories = await _db.Categories.ToListAsync(); return View(model); }
 
-            if (image != null && image.Length > 0)
+            // Reload dropdowns if you re-render the view
+            if (!ModelState.IsValid || images == null || images.Count == 0)
             {
-                var uploads = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "uploads");
-                if (!Directory.Exists(uploads)) Directory.CreateDirectory(uploads);
-                var fileName = Guid.NewGuid().ToString() + Path.GetExtension(image.FileName);
-                var filePath = Path.Combine(uploads, fileName);
-                using var fs = new FileStream(filePath, FileMode.Create);
-                await image.CopyToAsync(fs);
-                model.ImagePath = "/uploads/" + fileName;
+                ViewBag.Categories = await _db.Categories.ToListAsync();
+                if (images == null || images.Count == 0)
+                    ModelState.AddModelError("images", "Please select at least one image.");
+                return View(model);
             }
 
-            _db.Photos.Add(model);
+            var uploadsRoot = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "uploads");
+            if (!Directory.Exists(uploadsRoot))
+                Directory.CreateDirectory(uploadsRoot);
+
+            // Optional: basic validation
+            long maxBytes = 5 * 1024 * 1024; // 5 MB
+            string[] allowed = [".jpg", ".jpeg", ".png", ".webp"];
+
+            int added = 0;
+            foreach (var file in images)
+            {
+                if (file == null || file.Length == 0) continue;
+
+                var ext = Path.GetExtension(file.FileName).ToLowerInvariant();
+                if (!allowed.Contains(ext))
+                {
+                    // skip invalid file types
+                    continue;
+                }
+                if (file.Length > maxBytes)
+                {
+                    // skip too-large files
+                    continue;
+                }
+
+                var newName = $"{Guid.NewGuid()}{ext}";
+                var savePath = Path.Combine(uploadsRoot, newName);
+
+                using (var fs = new FileStream(savePath, FileMode.Create))
+                    await file.CopyToAsync(fs);
+
+                // Create a new Photo per file
+                var photo = new Photo
+                {
+                    Title = string.IsNullOrWhiteSpace(model.Title)
+                                ? Path.GetFileNameWithoutExtension(file.FileName)
+                                : model.Title,
+                    Description = model.Description,
+                    CategoryId = model.CategoryId,
+                    ImagePath = "/uploads/" + newName,
+                    // If your Photo has UploadDate or other props, set them here
+                    // UploadDate = DateTime.Now
+                };
+
+                _db.Photos.Add(photo);
+                added++;
+            }
+
+            if (added == 0)
+            {
+                ViewBag.Categories = await _db.Categories.ToListAsync();
+                ModelState.AddModelError("", "No valid images were uploaded.");
+                return View(model);
+            }
+
             await _db.SaveChangesAsync();
+            TempData["SuccessMessage"] = $"{added} photo(s) uploaded successfully!";
             return RedirectToAction("Index");
         }
+
 
         public async Task<IActionResult> Edit(int id)
         {

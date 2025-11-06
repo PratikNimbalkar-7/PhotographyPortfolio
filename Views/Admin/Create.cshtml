@@ -1,18 +1,38 @@
-@model PhotographyPortfolio.Models.Photo
+﻿@model PhotographyPortfolio.Models.Photo
 @{
-    ViewData["Title"] = "Add Photo";
+    ViewData["Title"] = "Add Photos";
     var cats = ViewBag.Categories as List<PhotographyPortfolio.Models.Category>;
 }
-<h3>Add Photo</h3>
-<form method="post" enctype="multipart/form-data">
-    <div class="mb-2"><input class="form-control" name="Title" placeholder="Title" /></div>
-    <div class="mb-2"><textarea class="form-control" name="Description" placeholder="Description"></textarea></div>
-    <div class="mb-2">
-        <select name="CategoryId" class="form-select">
+
+<h3 class="fw-bold mb-4" style="color:#00bcd4;">📸 Add Multiple Photos</h3>
+
+<form asp-action="Create" method="post" enctype="multipart/form-data">
+    <div class="mb-3">
+        <input class="form-control" name="Title" placeholder="Title (optional)" />
+    </div>
+
+    <div class="mb-3">
+        <textarea class="form-control" name="Description" placeholder="Description (optional)"></textarea>
+    </div>
+
+    <div class="mb-3">
+        <select name="CategoryId" class="form-select" required>
             <option value="">-- Select Category --</option>
-            @foreach(var c in cats) { <option value="@c.Id">@c.Name</option> }
+            @foreach (var c in cats)
+            {
+                <option value="@c.Id">@c.Name</option>
+            }
         </select>
     </div>
-    <div class="mb-2"><input type="file" name="image" class="form-control" /></div>
-    <button class="btn btn-success">Save</button>
+
+    <!-- ✅ Multiple file upload input -->
+    <div class="mb-3">
+        <label class="form-label fw-semibold">Select Photos</label>
+        <input type="file" name="images" class="form-control" accept="image/*" multiple required />
+        <small class="text-muted">You can select multiple photos at once</small>
+    </div>
+
+    <button type="submit" class="btn btn-primary w-100 mt-2">
+        <i class="fa fa-upload me-1"></i> Upload Photos
+    </button>
 </form>

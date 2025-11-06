@@ -31,6 +31,7 @@
             height: 220px;
             object-fit: cover;
             width: 100%;
+            cursor: pointer;
         }
 
             .card img:hover {
@@ -52,6 +53,82 @@
         .btn-back:hover {
             transform: scale(1.05);
         }
+
+    /* Lightbox Modal */
+    .modal-content {
+        background-color: #000;
+        border: none;
+        text-align: center;
+        position: relative;
+    }
+
+    .modal-body {
+        position: relative;
+        padding: 0;
+    }
+
+        .modal-body img {
+            max-height: 85vh;
+            width: auto;
+            border-radius: 10px;
+        }
+
+    /* Navigation Arrows */
+    .nav-btn {
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        background: rgba(0, 0, 0, 0.6);
+        border: none;
+        color: #00bcd4;
+        font-size: 2.5rem;
+        cursor: pointer;
+        padding: 8px 15px;
+        border-radius: 50%;
+        transition: all 0.3s ease;
+    }
+
+        .nav-btn:hover {
+            color: #fff;
+            background: rgba(0, 188, 212, 0.6);
+            transform: translateY(-50%) scale(1.1);
+        }
+
+    #prevBtn {
+        left: 5px;
+    }
+
+    #nextBtn {
+        right: 5px;
+    }
+
+    /* Title styling inside modal */
+    #modalTitle {
+        color: #00bcd4;
+        margin-top: 15px;
+    }
+
+    .btn-close-modal {
+        position: absolute;
+        top: 15px;
+        right: 15px;
+        background: #dc3545;
+        color: white;
+        border: none;
+        border-radius: 50%;
+        width: 35px;
+        height: 35px;
+        font-size: 1.2rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.3s ease;
+    }
+
+        .btn-close-modal:hover {
+            background: #ff4d4d;
+            transform: scale(1.1);
+        }
 </style>
 
 <div class="container py-5">
@@ -62,15 +139,15 @@
         </a>
     </div>
 
-    <div class="row">
+    <div class="row" id="photoGallery">
         @foreach (var p in Model)
         {
             <div class="col-sm-6 col-md-4 col-lg-3 mb-4">
                 <div class="card shadow-sm border-0 h-100">
-                    <a href="@Url.Action("Details", "Home", new { id = p.Id })">
-                        <img src="@p.ImagePath" class="card-img-top" alt="@p.Title" />
-                    </a>
-
+                    <img src="@p.ImagePath"
+                         alt="@p.Title"
+                         class="card-img-top gallery-img"
+                         data-title="@p.Title" />
                     <div class="card-body text-center">
                         <h5 class="fw-semibold">@p.Title</h5>
                     </div>
@@ -79,3 +156,67 @@
         }
     </div>
 </div>
+
+<!-- Lightbox Modal -->
+<div class="modal fade" id="photoModal" tabindex="-1" aria-labelledby="photoModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-xl">
+        <div class="modal-content">
+            <div class="modal-body position-relative">
+                <button type="button" class="btn-close-modal" data-bs-dismiss="modal" aria-label="Close">
+                    <i class="fa fa-times"></i>
+                </button>
+                <button id="prevBtn" class="nav-btn"><i class="fa fa-chevron-left"></i></button>
+                <img id="modalImage" src="" alt="" />
+                <button id="nextBtn" class="nav-btn"><i class="fa fa-chevron-right"></i></button>
+            </div>
+            <div class="p-3 text-center">
+                <h5 id="modalTitle"></h5>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        const galleryImages = document.querySelectorAll(".gallery-img");
+        const modal = new bootstrap.Modal(document.getElementById("photoModal"));
+        const modalImage = document.getElementById("modalImage");
+        const modalTitle = document.getElementById("modalTitle");
+        const prevBtn = document.getElementById("prevBtn");
+        const nextBtn = document.getElementById("nextBtn");
+
+        let currentIndex = 0;
+
+        // Open modal
+        galleryImages.forEach((img, index) => {
+            img.addEventListener("click", () => {
+                currentIndex = index;
+                showImage();
+                modal.show();
+            });
+        });
+
+        function showImage() {
+            const img = galleryImages[currentIndex];
+            modalImage.src = img.src;
+            modalTitle.textContent = img.getAttribute("data-title");
+        }
+
+        prevBtn.addEventListener("click", () => {
+            currentIndex = (currentIndex - 1 + galleryImages.length) % galleryImages.length;
+            showImage();
+        });
+
+        nextBtn.addEventListener("click", () => {
+            currentIndex = (currentIndex + 1) % galleryImages.length;
+            showImage();
+        });
+
+        // Keyboard navigation
+        document.addEventListener("keydown", (e) => {
+            if (!document.getElementById("photoModal").classList.contains("show")) return;
+            if (e.key === "ArrowRight") nextBtn.click();
+            if (e.key === "ArrowLeft") prevBtn.click();
+        });
+    </script>
+}
