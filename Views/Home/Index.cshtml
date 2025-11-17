@@ -1,7 +1,7 @@
-﻿@model IEnumerable<PhotographyPortfolio.Models.Photo>
+﻿@model IEnumerable<PhotographyPortfolio.ViewModels.CategoryMediaViewModel>
+
 @{
-    ViewData["Title"] = "Photo Gallery";
-    var cats = ViewBag.Categories as List<PhotographyPortfolio.Models.Category>;
+    ViewData["Title"] = "Photo & Video Gallery";
 }
 
 <style>
@@ -48,12 +48,19 @@
                 transform: scale(1.05);
             }
 
+        .card video {
+            width: 100%;
+            height: 220px;
+            object-fit: cover;
+            border-bottom: 1px solid #333;
+        }
+
     .card-body {
         text-align: center;
         padding: 15px;
     }
 
-    h3 {
+    h3.category-name {
         color: #00bcd4;
         font-size: 1.1rem;
         margin-bottom: 10px;
@@ -78,41 +85,120 @@
         border: 1px solid #333;
         color: #ccc;
     }
+
+    /* small helpers */
+    .media-title {
+        font-size: 0.95rem;
+        margin: 0;
+        color: #e9eef5;
+        font-weight: 600;
+    }
+
+    .media-sub {
+        font-size: 0.85rem;
+        color: #bfc8cc;
+        margin: 0;
+    }
 </style>
 
 <div class="container gallery-section">
-    <h1>📸 Photo Gallery</h1>
+    <h1>📸 Photo & 🎬 Video Gallery</h1>
 
-    @if (cats != null && cats.Any())
+    @if (Model != null && Model.Any())
     {
-        <div class="row">
-            @foreach (var category in cats)
+        <!-- Top: Category cover cards -->
+        <div class="row mb-5">
+            @foreach (var group in Model)
             {
-                var firstPhoto = Model.FirstOrDefault(p => p.CategoryId == category.Id);
-                if (firstPhoto != null)
-                {
-                    <div class="col-sm-6 col-md-4 col-lg-3 mb-4">
-                        <div class="card shadow-sm border-0 h-100">
-                            <a href="@Url.Action("CategoryPhotos", "Home", new { id = category.Id })">
-                                <img src="@firstPhoto.ImagePath" class="card-img-top" alt="@category.Name" />
+                // choose a cover: first photo else first video
+                var coverPhoto = group.Photos?.FirstOrDefault();
+                var coverVideo = group.Videos?.FirstOrDefault();
+                <div class="col-sm-6 col-md-4 col-lg-3 mb-4">
+                    <div class="card shadow-sm border-0 h-100">
+                        <a href="@Url.Action("Category", "Home", new { id = group.Category.Id })" style="display:block;">
+                            @if (coverPhoto != null)
+                            {
+                                <img src="@coverPhoto.ImagePath" alt="@group.Category.Name" />
+                            }
+                            else if (coverVideo != null)
+                            {
+                                <video muted autoplay loop playsinline>
+                                    <source src="@coverVideo.MediaPath" type="video/mp4" />
+                                    Your browser does not support the video tag.
+                                </video>
+                            }
+                            else
+                            {
+                                <img src="/images/placeholder.png" alt="@group.Category.Name" />
+                            }
+                        </a>
+                        <div class="card-body">
+                            <h3 class="category-name">@group.Category.Name</h3>
+                            <a href="@Url.Action("Category", "Home", new { id = group.Category.Id })"
+                               class="btn btn-sm btn-primary mt-2">
+                                <i class="fa fa-images me-1"></i> View All
                             </a>
-                            <div class="card-body">
-                                <h3>@category.Name</h3>
-                                <a href="@Url.Action("CategoryPhotos", "Home", new { id = category.Id })"
-                                   class="btn btn-sm btn-primary mt-2">
-                                    <i class="fa fa-images me-1"></i> View All
-                                </a>
-                            </div>
                         </div>
                     </div>
-                }
+                </div>
             }
         </div>
+
+        <!-- Grouped gallery: photos + videos for each category -->
+        @foreach (var group in Model)
+        {
+            <div class="mb-5">
+                <h3 class="fw-bold mb-3 border-bottom pb-2">@group.Category.Name</h3>
+
+                <div class="row">
+                    @* Photos first (you can interleave if you prefer) *@
+                    @if (group.Photos != null && group.Photos.Any())
+                    {
+                        foreach (var p in group.Photos)
+                        {
+                            <div class="col-sm-6 col-md-4 col-lg-3 mb-4">
+                                <div class="card shadow-sm border-0 h-100">
+                                    <a href="@Url.Action("Details", "Home", new { id = p.Id })" style="display:block;">
+                                        <img src="@p.ImagePath" class="card-img-top" alt="@p.Title" />
+                                    </a>
+                                    <div class="card-body">
+                                        <p class="media-title">@p.Title</p>
+                                        <p class="media-sub">@p.Description</p>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    }
+
+                    @* Videos after photos *@
+                    @if (group.Videos != null && group.Videos.Any())
+                    {
+                        foreach (var v in group.Videos)
+                        {
+                            <div class="col-sm-6 col-md-4 col-lg-3 mb-4">
+                                <div class="card shadow-sm border-0 h-100">
+                                    <a href="@Url.Action("Details", "Videos", new { id = v.Id })" style="display:block;">
+                                        <video controls preload="metadata">
+                                            <source src="@v.MediaPath" type="video/mp4" />
+                                            Your browser does not support the video tag.
+                                        </video>
+                                    </a>
+                                    <div class="card-body">
+                                        <p class="media-title">@v.Title</p>
+                                        <p class="media-sub">@v.Description</p>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    }
+                </div>
+            </div>
+        }
     }
     else
     {
         <div class="alert alert-warning text-center mt-4">
-            No categories or photos found.
+            No categories, photos or videos found.
         </div>
     }
 </div>

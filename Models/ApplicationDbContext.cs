@@ -8,5 +8,6 @@ namespace PhotographyPortfolio.Models
 
         public DbSet<Photo> Photos { get; set; }
         public DbSet<Category> Categories { get; set; }
+        public DbSet<Video> Videos { get; set; }
     }
 }

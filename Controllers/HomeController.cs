@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using PhotographyPortfolio.Models;
 using PhotographyPortfolio.Services;
+using PhotographyPortfolio.ViewModels;
 using System.Net;
 using System.Net.Mail;
 
@@ -20,19 +21,30 @@ namespace PhotographyPortfolio.Controllers
 
 
         // ✅ Home page - show only 1 photo per category
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(int? categoryId)
         {
-            var categories = await _db.Categories.ToListAsync();
+            // load categories (filter if needed)
+            var categoriesQuery = _db.Categories.AsQueryable();
+            if (categoryId.HasValue) categoriesQuery = categoriesQuery.Where(c => c.Id == categoryId.Value);
+            var categories = await categoriesQuery.ToListAsync();
 
-            var photos = await _db.Photos
-                .Include(p => p.Category)
-                .OrderByDescending(p => p.CreatedAt)
-                .ToListAsync();
+            var models = new List<CategoryMediaViewModel>();
+            foreach (var cat in categories)
+            {
+                var photos = await _db.Photos.Where(p => p.CategoryId == cat.Id).OrderByDescending(p => p.CreatedAt).ToListAsync();
+                var videos = await _db.Videos.Where(v => v.CategoryId == cat.Id).OrderByDescending(v => v.CreatedAt).ToListAsync();
 
-            ViewBag.Categories = categories;
-          
-            return View(photos);
+                models.Add(new CategoryMediaViewModel
+                {
+                    Category = cat,
+                    Photos = photos,
+                    Videos = videos
+                });
+            }
+
+            return View(models); // View model: IEnumerable<CategoryMediaViewModel>
         }
+
 
         // ✅ Display all photos for a specific category
         public IActionResult CategoryPhotos(int id)
