@@ -1,71 +1,30 @@
-﻿@model PhotographyPortfolio.ViewModels.VideoViewModel
+﻿@model PhotographyPortfolio.Models.VideoViewModel
+@using Microsoft.AspNetCore.Mvc.Rendering
 @{
-    ViewData["Title"] = "Create Video";
-    var categories = ViewBag.Categories as List<PhotographyPortfolio.Models.Category> ?? new();
-}
-
-<h2>Create Video</h2>
-
-@* show modelstate errors *@
-@if (!ViewData.ModelState.IsValid)
-{
-    <div class="alert alert-danger">
-        <ul>
-            @foreach (var kvp in ViewData.ModelState.Where(m => m.Value.Errors.Count > 0))
-            {
-                foreach (var err in kvp.Value.Errors)
-                {
-                    <li>@(string.IsNullOrWhiteSpace(err.ErrorMessage) ? err.Exception?.Message : err.ErrorMessage)</li>
-                }
-            }
-        </ul>
-    </div>
+    var cats = ViewBag.Categories as List<PhotographyPortfolio.Models.Category>;
 }
 
 <form asp-action="Create" method="post" enctype="multipart/form-data">
-    @Html.AntiForgeryToken()
+
+    <input asp-for="Title" class="form-control" />
+
+    <textarea asp-for="Description" class="form-control"></textarea>
 
     <div class="mb-3">
-        <label asp-for="Title" class="form-label">Title</label>
-        <input asp-for="Title" class="form-control" />
-        <span asp-validation-for="Title" class="text-danger"></span>
-    </div>
-
-    <div class="mb-3">
-        <label asp-for="Description" class="form-label">Description</label>
-        <textarea asp-for="Description" class="form-control"></textarea>
-        <span asp-validation-for="Description" class="text-danger"></span>
-    </div>
-
-    <div class="mb-3">
-        <label asp-for="CategoryId" class="form-label">Category</label>
-        <select asp-for="CategoryId" class="form-select">
+        <select name="CategoryId" class="form-select" required>
             <option value="">-- Select Category --</option>
-            @foreach (var c in categories)
+            @foreach (var c in cats)
             {
-                <option value="@c.Id" @(Model.CategoryId == c.Id ? "selected" : "")>@c.Name</option>
+                <option value="@c.Id">@c.Name</option>
             }
         </select>
-        <span asp-validation-for="CategoryId" class="text-danger"></span>
     </div>
 
-    <div class="mb-3">
-        <label asp-for="CreatedAt" class="form-label">Created At</label>
-        <input asp-for="CreatedAt" class="form-control" type="datetime-local"
-               value="@(Model.CreatedAt.HasValue? Model.CreatedAt.Value.ToString("yyyy-MM-ddTHH:mm") : string.Empty)" />
-        <span asp-validation-for="CreatedAt" class="text-danger"></span>
-    </div>
+    <input type="file"
+           asp-for="VideoFile"
+           accept="video/mp4,video/webm"
+           class="form-control" />
 
-    <div class="mb-3">
-        <label asp-for="File" class="form-label">Upload Video</label>
-        <input asp-for="File" type="file" accept="video/mp4,video/webm,video/ogg" class="form-control" />
-        <span asp-validation-for="File" class="text-danger"></span>
-    </div>
+    <button class="btn btn-primary">Upload</button>
 
-    <button type="submit" class="btn btn-primary">Save Video</button>
-    <a asp-action="Index" class="btn btn-secondary">Cancel</a>
 </form>
-
-@section Scripts {
-    <partial name="_ValidationScriptsPartial" />
-}

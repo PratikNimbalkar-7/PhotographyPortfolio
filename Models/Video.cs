@@ -1,25 +1,18 @@
-﻿using Microsoft.AspNetCore.Mvc.ModelBinding;
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
-
-namespace PhotographyPortfolio.Models
+﻿namespace PhotographyPortfolio.Models
 {
-    public class Video
+    public class video
     {
         public int Id { get; set; }
 
-        [Required]
-        public string Title { get; set; } = string.Empty;
+        public string Title { get; set; }
 
-        public string? Description { get; set; }
+        public string Description { get; set; }
 
-        [BindNever]
-        public string MediaPath { get; set; } = string.Empty;
+        public string VideoPath { get; set; }   // /videos/wedding/abc.mp4
 
-        [ForeignKey("Category")]
         public int CategoryId { get; set; }
-        public Category? Category { get; set; }
+        public Category Category { get; set; }
 
-        public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+        public DateTime CreatedAt { get; set; }
     }
 }

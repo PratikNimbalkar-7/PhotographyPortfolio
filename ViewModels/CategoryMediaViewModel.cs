@@ -6,6 +6,5 @@ namespace PhotographyPortfolio.ViewModels
     {
         public Category Category { get; set; } = null!;
         public IEnumerable<Photo> Photos { get; set; } = Enumerable.Empty<Photo>();
-        public IEnumerable<Video> Videos { get; set; } = Enumerable.Empty<Video>();
     }
 }

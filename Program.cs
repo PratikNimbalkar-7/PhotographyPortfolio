@@ -10,7 +10,6 @@ builder.Services.AddControllersWithViews();
 // Configure DB (connection string in appsettings.json)
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"))
-           .ConfigureWarnings(w => w.Ignore(Microsoft.EntityFrameworkCore.Diagnostics.RelationalEventId.PendingModelChangesWarning))
 );
 
 
@@ -42,11 +41,16 @@ if (!Directory.Exists(uploadPath)) Directory.CreateDirectory(uploadPath);
 //    DbSeeder.EnsureSeedData(db, app.Environment);
 //}
 
-if (!app.Environment.IsDevelopment())
+if (app.Environment.IsDevelopment())
+{
+    app.UseDeveloperExceptionPage();
+}
+else
 {
     app.UseExceptionHandler("/Home/Error");
     app.UseHsts();
 }
+
 
 app.UseStaticFiles();
 app.UseRouting();

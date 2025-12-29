@@ -12,8 +12,8 @@ using PhotographyPortfolio.Models;
 namespace PhotographyPortfolio.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20251112062544_AddTableVideos")]
-    partial class AddTableVideos
+    [Migration("20251229084437_AddDatabase")]
+    partial class AddDatabase
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -74,7 +74,7 @@ namespace PhotographyPortfolio.Migrations
                     b.ToTable("Photos");
                 });
 
-            modelBuilder.Entity("PhotographyPortfolio.Models.Video", b =>
+            modelBuilder.Entity("PhotographyPortfolio.Models.video", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -89,13 +89,14 @@ namespace PhotographyPortfolio.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Description")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("MediaPath")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Title")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("VideoPath")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -117,7 +118,7 @@ namespace PhotographyPortfolio.Migrations
                     b.Navigation("Category");
                 });
 
-            modelBuilder.Entity("PhotographyPortfolio.Models.Video", b =>
+            modelBuilder.Entity("PhotographyPortfolio.Models.video", b =>
                 {
                     b.HasOne("PhotographyPortfolio.Models.Category", "Category")
                         .WithMany()

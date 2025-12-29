@@ -29,21 +29,26 @@ namespace PhotographyPortfolio.Controllers
             var categories = await categoriesQuery.ToListAsync();
 
             var models = new List<CategoryMediaViewModel>();
+
             foreach (var cat in categories)
             {
-                var photos = await _db.Photos.Where(p => p.CategoryId == cat.Id).OrderByDescending(p => p.CreatedAt).ToListAsync();
-                var videos = await _db.Videos.Where(v => v.CategoryId == cat.Id).OrderByDescending(v => v.CreatedAt).ToListAsync();
+                // load photos for this category
+                var photos = await _db.Photos
+                    .Where(p => p.CategoryId == cat.Id)
+                    .OrderByDescending(p => p.CreatedAt)
+                    .ToListAsync();
 
+                // Create view model instance and add to list
                 models.Add(new CategoryMediaViewModel
                 {
                     Category = cat,
-                    Photos = photos,
-                    Videos = videos
+                    Photos = photos // assuming Photos property type accepts entity list
                 });
             }
 
-            return View(models); // View model: IEnumerable<CategoryMediaViewModel>
+            return View(models);
         }
+
 
 
         // ✅ Display all photos for a specific category

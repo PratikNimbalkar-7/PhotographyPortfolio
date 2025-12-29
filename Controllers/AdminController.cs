@@ -77,7 +77,7 @@ namespace PhotographyPortfolio.Controllers
                 Directory.CreateDirectory(uploadsRoot);
 
             // Optional: basic validation
-            long maxBytes = 5 * 1024 * 1024; // 5 MB
+            long maxBytes = 70 * 1024 * 1024; // 5 MB
             string[] allowed = [".jpg", ".jpeg", ".png", ".webp"];
 
             int added = 0;
