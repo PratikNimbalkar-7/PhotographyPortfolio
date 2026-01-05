@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
 namespace PhotographyPortfolio.Models
 {
@@ -8,7 +9,8 @@ namespace PhotographyPortfolio.Models
 
         public DbSet<Photo> Photos { get; set; }
         public DbSet<Category> Categories { get; set; }
-        public DbSet<video> Videos { get; set; }
+        public DbSet<Video> Videos { get; set; }
+
 
     }
 }

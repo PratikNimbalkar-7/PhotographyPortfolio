@@ -11,6 +11,11 @@ builder.Services.AddControllersWithViews();
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"))
 );
+    builder.Services.Configure<FormOptions>(options =>
+{
+    options.MultipartBodyLengthLimit = 50 * 1024 * 1024; // 50 MB
+});
+
 
 
 // Simple session-based auth
@@ -30,8 +35,8 @@ builder.Services.AddTransient<PhotographyPortfolio.Services.MailService>();
 var app = builder.Build();
 
 // Ensure uploads folder exists
-var uploadPath = Path.Combine(app.Environment.ContentRootPath, "wwwroot", "uploads");
-if (!Directory.Exists(uploadPath)) Directory.CreateDirectory(uploadPath);
+//var uploadPath = Path.Combine(app.Environment.ContentRootPath, "wwwroot", "uploads");
+//if (!Directory.Exists(uploadPath)) Directory.CreateDirectory(uploadPath);
 
 // Apply migrations on startup (for dev convenience)
 //using (var scope = app.Services.CreateScope())
@@ -51,7 +56,8 @@ else
     app.UseHsts();
 }
 
-
+app.UseHttpsRedirection();
+app.UseAuthorization();
 app.UseStaticFiles();
 app.UseRouting();
 app.UseSession();

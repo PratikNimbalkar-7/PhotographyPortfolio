@@ -1,30 +1,101 @@
-﻿@model PhotographyPortfolio.Models.VideoViewModel
-@using Microsoft.AspNetCore.Mvc.Rendering
+﻿@using PhotographyPortfolio.Models.ViewModels
+
+@model VideoViewModel
+
 @{
-    var cats = ViewBag.Categories as List<PhotographyPortfolio.Models.Category>;
+    ViewData["Title"] = "Upload Video";
 }
 
-<form asp-action="Create" method="post" enctype="multipart/form-data">
+<h2>Upload Video</h2>
 
-    <input asp-for="Title" class="form-control" />
+<div class="d-flex justify-content-end mb-3">
+    <a href="@Url.Action("Index", "Admin")" class="btn btn-outline-primary btn-back">
+        <i class="fa fa-arrow-left me-2"></i> Back to Gallery
+    </a>
 
-    <textarea asp-for="Description" class="form-control"></textarea>
+</div>
 
-    <div class="mb-3">
-        <select name="CategoryId" class="form-select" required>
-            <option value="">-- Select Category --</option>
-            @foreach (var c in cats)
-            {
-                <option value="@c.Id">@c.Name</option>
-            }
-        </select>
+<form id="videoForm" enctype="multipart/form-data">
+
+    
+
+    <!-- Title -->
+    <div class="form-group">
+        <label>Title</label>
+        <input type="text" name="Title" class="form-control" required />
     </div>
 
-    <input type="file"
-           asp-for="VideoFile"
-           accept="video/mp4,video/webm"
-           class="form-control" />
+    <!-- Description -->
+    <div class="form-group">
+        <label>Description</label>
+        <textarea name="Description" class="form-control"></textarea>
+    </div>
 
-    <button class="btn btn-primary">Upload</button>
+    <!-- Category -->
+    <div class="form-group">
+        <label>Category</label>
+        @* <select name="CategoryType" class="form-control" required> *@
+        <select name="CategoryId" class="form-control" required>
 
+            <option value="">-- Select Category --</option>
+            @foreach (var item in ViewBag.Categories)
+            {
+                <option value="@item.Id">@item.Name</option>
+            }
+        </select>
+
+    </div>
+
+    <!-- Video File -->
+    <div class="form-group">
+        <label>Video File</label>
+        <input type="file" name="VideoFile" class="form-control" required />
+    </div>
+
+    <br />
+
+    <button type="button" class="btn btn-primary" onclick="uploadVideo()">
+        Upload Video
+    </button>
 </form>
+
+<br />
+<div id="result"></div>
+
+@section Scripts {
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <script>
+        function uploadVideo() {
+
+            // Take whole form automatically
+            var form = document.getElementById("videoForm");
+            var formData = new FormData(form);
+
+            $.ajax({
+                url: '/Videos/Create',
+                type: 'POST',
+                data: formData,
+                processData: false,
+                contentType: false,
+                success: function (res) {
+                    if (res.success) {
+                        $("#result").html(
+                            "<span style='color:green'>" + res.message + "</span>"
+                        );
+                        $("#videoForm")[0].reset();
+                    } else {
+                        $("#result").html(
+                            "<span style='color:red'>" + res.message + "</span>"
+                        );
+                    }
+                },
+                error: function () {
+                    $("#result").html(
+                        "<span style='color:red'>Something went wrong</span>"
+                    );
+                }
+            });
+        }
+    </script>
+}
