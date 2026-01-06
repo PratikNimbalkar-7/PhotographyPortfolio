@@ -6,6 +6,13 @@
 
 <h3 class="fw-bold mb-4" style="color:#00bcd4;">📸 Add Multiple Photos</h3>
 
+<div class="d-flex justify-content-end mb-3">
+    <a href="@Url.Action("Index", "Admin")" class="btn btn-outline-primary btn-back">
+        <i class="fa fa-arrow-left me-2"></i> Back to Gallery
+    </a>
+
+</div>
+
 <form asp-action="Create" method="post" enctype="multipart/form-data">
     <div class="mb-3">
         <input class="form-control" name="Title" placeholder="Title (optional)" />

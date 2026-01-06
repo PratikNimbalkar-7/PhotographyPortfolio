@@ -1,6 +1,6 @@
 ﻿namespace PhotographyPortfolio.Models
 {
-    public class video
+    public class Video
     {
         public int Id { get; set; }
 

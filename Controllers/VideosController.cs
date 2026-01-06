@@ -1,12 +1,15 @@
-﻿using System;
-using System.IO;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Hosting;
+﻿using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using PhotographyPortfolio.Models;
+using PhotographyPortfolio.Models.ViewModels;
+using System;
+using System.IO;
+using System.Linq;
+using System.Threading.Tasks;
+
 
 namespace PhotographyPortfolio.Controllers
 {
@@ -21,6 +24,7 @@ namespace PhotographyPortfolio.Controllers
             _env = env;
         }
 
+
         [HttpGet]
         public async Task<IActionResult> Create()
         {
@@ -28,51 +32,56 @@ namespace PhotographyPortfolio.Controllers
             return View();
         }
 
+
         [HttpPost]
         public async Task<IActionResult> Create(VideoViewModel vm)
         {
             if (!ModelState.IsValid)
-            {
-                var categories = await _db.Categories
-                                          .OrderBy(c => c.Name)
-                                          .ToListAsync();
+                return Json(new { success = false, message = "Invalid data" });
 
-                ViewData["Categories"] = categories
-                    .Select(c => new SelectListItem { Value = c.Id.ToString(), Text = c.Name })
-                    .ToList();
+            if (vm.VideoFile == null || vm.VideoFile.Length == 0)
+                return Json(new { success = false, message = "Please select a video file" });
 
-                return View(vm);
-            }
+            // 2️ File size validation (50 MB)
+            const long MaxVideoSize = 50 * 1024 * 1024; // 50 MB
+            if (vm.VideoFile.Length > MaxVideoSize)
+                return Json(new { success = false, message = "Video size must be less than 50 MB" });
 
-            string videoPath = null;
+            if (vm.CategoryId <= 0)
+                return Json(new { success = false, message = "Please select a category" });
 
-            if (vm.VideoFile != null)
-            {
-                string folder = Path.Combine(_env.WebRootPath, "videos");
-                Directory.CreateDirectory(folder);
+            var category = await _db.Categories.FindAsync(vm.CategoryId);
+            if (category == null)
+                return Json(new { success = false, message = "Category not found" });
 
-                string fileName = Guid.NewGuid() + Path.GetExtension(vm.VideoFile.FileName);
-                string fullPath = Path.Combine(folder, fileName);
+            string folder = Path.Combine(_env.WebRootPath, "videos", category.Name);
+            Directory.CreateDirectory(folder);
 
-                using var stream = new FileStream(fullPath, FileMode.Create);
-                await vm.VideoFile.CopyToAsync(stream);
+            string fileName = Guid.NewGuid() + Path.GetExtension(vm.VideoFile.FileName);
+            string filePath = Path.Combine(folder, fileName);
 
-                videoPath = "/videos/" + fileName;
-            }
+            using var stream = new FileStream(filePath, FileMode.Create);
+            await vm.VideoFile.CopyToAsync(stream);
 
-            var video = new video
+            var video = new Video
             {
                 Title = vm.Title,
-                Description = vm.Description,
-                VideoPath = videoPath,
+                Description = vm.Description ?? "",
                 CategoryId = vm.CategoryId,
+                VideoPath = $"videos/{category.Name}/{fileName}",
                 CreatedAt = DateTime.Now
             };
 
             _db.Videos.Add(video);
             await _db.SaveChangesAsync();
 
-            return RedirectToAction("Index");
+            return Json(new { success = true, message = "Video uploaded successfully" });
         }
+
+
+
+
     }
 }
+
+    
