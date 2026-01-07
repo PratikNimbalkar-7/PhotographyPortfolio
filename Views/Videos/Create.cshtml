@@ -45,7 +45,6 @@
         </select>
 
     </div>
-
     <!-- Video File -->
     <div class="form-group">
         <label>Video File</label>
@@ -62,10 +61,37 @@
 <br />
 <div id="result"></div>
 
+<!-- ================= SUCCESS POPUP (ADD HERE) ================= -->
+<div class="modal fade" id="uploadSuccessModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content shadow">
+            <div class="modal-header bg-success text-white">
+                <h5 class="modal-title">Upload Successful</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+
+            <div class="modal-body text-center">
+                <i class="fa fa-check-circle text-success" style="font-size:50px;"></i>
+                <p class="mt-3 fw-bold" id="successMessage"></p>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-success" data-bs-dismiss="modal">
+                    OK
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
 @section Scripts {
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
     <script>
+
+            $("#btnUpload").on("click", function () {
+            uploadVideo();
+        });
+
         function uploadVideo() {
 
             // Take whole form automatically
@@ -78,18 +104,43 @@
                 data: formData,
                 processData: false,
                 contentType: false,
-                success: function (res) {
-                    if (res.success) {
-                        $("#result").html(
-                            "<span style='color:green'>" + res.message + "</span>"
-                        );
-                        $("#videoForm")[0].reset();
-                    } else {
-                        $("#result").html(
-                            "<span style='color:red'>" + res.message + "</span>"
-                        );
-                    }
-                },
+
+                // >> without popup >> 
+
+               // success: function (res) {
+                //     if (res.success) {
+                //         $("#result").html(
+                //             "<span style='color:green'>" + res.message + "</span>"
+                //         );
+                //         $("#videoForm")[0].reset();
+                //     } else {
+                //         $("#result").html(
+                //             "<span style='color:red'>" + res.message + "</span>"
+                //         );
+                //     }
+                // },
+
+            success: function (res) {
+                if (res.success) {
+
+                    $("#successMessage").text(res.message);
+
+                    // ✅ Bootstrap 5 MODAL (CORRECT WAY)
+                    var modal = new bootstrap.Modal(
+                        document.getElementById('uploadSuccessModal')
+                    );
+                    modal.show();
+
+                    $("#videoForm")[0].reset();
+                    $("#result").html("");
+
+                } else {
+                    $("#result").html(
+                        "<span class='text-danger'>" + res.message + "</span>"
+                    );
+                }
+            },
+
                 error: function () {
                     $("#result").html(
                         "<span style='color:red'>Something went wrong</span>"

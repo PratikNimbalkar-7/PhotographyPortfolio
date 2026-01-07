@@ -60,8 +60,10 @@ namespace PhotographyPortfolio.Controllers
             string fileName = Guid.NewGuid() + Path.GetExtension(vm.VideoFile.FileName);
             string filePath = Path.Combine(folder, fileName);
 
-            using var stream = new FileStream(filePath, FileMode.Create);
-            await vm.VideoFile.CopyToAsync(stream);
+            using (var stream = new FileStream(filePath, FileMode.Create))
+            {
+                await vm.VideoFile.CopyToAsync(stream);
+            }
 
             var video = new Video
             {
@@ -75,11 +77,15 @@ namespace PhotographyPortfolio.Controllers
             _db.Videos.Add(video);
             await _db.SaveChangesAsync();
 
-            return Json(new { success = true, message = "Video uploaded successfully" });
+           // return Json(new { success = true, message = "Video uploaded successfully" });
+
+            return Json(new
+            {
+                success = true,
+                message = "Video uploaded successfully"
+            });
+
         }
-
-
-
 
     }
 }
