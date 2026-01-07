@@ -20,29 +20,40 @@ namespace PhotographyPortfolio.Controllers
         }
 
 
-        // ✅ Home page - show only 1 photo per category
+        // ✅ Home page - show 1 photo + 1 video per category
         public async Task<IActionResult> Index(int? categoryId)
         {
-            // load categories (filter if needed)
+            // Load categories (optionally filtered)
             var categoriesQuery = _db.Categories.AsQueryable();
-            if (categoryId.HasValue) categoriesQuery = categoriesQuery.Where(c => c.Id == categoryId.Value);
+
+            if (categoryId.HasValue)
+                categoriesQuery = categoriesQuery.Where(c => c.Id == categoryId.Value);
+
             var categories = await categoriesQuery.ToListAsync();
 
             var models = new List<CategoryMediaViewModel>();
 
             foreach (var cat in categories)
             {
-                // load photos for this category
+                // Latest photo
                 var photos = await _db.Photos
                     .Where(p => p.CategoryId == cat.Id)
                     .OrderByDescending(p => p.CreatedAt)
+                    .Take(1)
                     .ToListAsync();
 
-                // Create view model instance and add to list
+                // Latest video
+                var videos = await _db.Videos
+                    .Where(v => v.CategoryId == cat.Id)
+                    .OrderByDescending(v => v.CreatedAt)
+                    .Take(1)
+                    .ToListAsync();
+
                 models.Add(new CategoryMediaViewModel
                 {
                     Category = cat,
-                    Photos = photos // assuming Photos property type accepts entity list
+                    Photos = photos,
+                    videos = videos
                 });
             }
 

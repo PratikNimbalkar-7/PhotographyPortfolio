@@ -26,6 +26,13 @@ namespace PhotographyPortfolio.Controllers
 
 
         [HttpGet]
+        public async Task<IActionResult> Index()
+        {
+            var videos = await _db.Videos.ToListAsync();
+            return View(videos);
+        }
+
+        [HttpGet]
         public async Task<IActionResult> Create()
         {
             ViewBag.Categories = await _db.Categories.ToListAsync();
