@@ -41,7 +41,10 @@ namespace PhotographyPortfolio.Controllers
 
 
         [HttpPost]
-        public async Task<IActionResult> Create(VideoViewModel vm)
+
+        [RequestSizeLimit(52428800)] // 50 MB
+        [RequestFormLimits(MultipartBodyLengthLimit = 52428800)]
+        public async Task<IActionResult> Create([FromForm] VideoViewModel vm)
         {
             if (!ModelState.IsValid)
                 return Json(new { success = false, message = "Invalid data" });
@@ -98,5 +101,10 @@ namespace PhotographyPortfolio.Controllers
 
     }
 }
+
+
+
+
+    
 
     

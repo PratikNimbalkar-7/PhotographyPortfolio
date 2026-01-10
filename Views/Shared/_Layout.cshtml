@@ -13,136 +13,132 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet" />
 
     <style>
-        body {
-            background-color: #0d0d0d;
-            color: #f8f9fa;
-            font-family: 'Poppins', sans-serif;
-            margin: 0;
-            padding: 0;
+      
+
+
+        /* ===== GLASS NAVBAR ===== */
+        .glass-navbar {
+            background: rgba(2, 6, 23, 0.75);
+            backdrop-filter: blur(12px);
+            box-shadow: 0 10px 30px rgba(0,0,0,.4);
+            padding: 12px 0;
+            transition: all .3s ease;
         }
 
-        /* 🔹 Extra Slim Fixed Navbar */
-        .navbar {
-            background-color: #000;
-            box-shadow: 0 2px 8px rgba(255, 255, 255, 0.05);
-            padding-top: 2px !important;
-            padding-bottom: 2px !important;
-            min-height: 40px;
+        /* BRAND */
+        .brand-icon {
+            font-size: 1.4rem;
+            color: #00bcd4;
         }
 
-        .navbar-brand {
-            font-weight: 700;
-            color: #00bcd4 !important;
+        .brand-text {
             letter-spacing: 1px;
-            text-transform: uppercase;
-            font-size: 1rem;
-            line-height: 1;
         }
 
+        /* NAV LINKS */
         .navbar-nav .nav-link {
-            color: #f8f9fa !important;
-            font-weight: 500;
-            padding: 4px 8px !important;
-            transition: all 0.3s ease;
-            font-size: 0.9rem;
-            line-height: 1;
+            color: #cbd5f5 !important;
+            padding: 8px 14px;
+            border-radius: 10px;
+            transition: all .3s ease;
         }
 
-            .navbar-nav .nav-link:hover,
-            .navbar-nav .nav-link.active {
-                color: #00bcd4 !important;
-                transform: translateY(-1px);
-            }
-
-        .navbar-toggler {
-            padding: 2px 6px;
-            font-size: 0.8rem;
+        /* HOVER EFFECT */
+        .nav-animate:hover {
+            background: rgba(0, 188, 212, 0.15);
+            color: #00e5ff !important;
+            transform: translateY(-2px);
         }
 
-        /* ✅ Space for fixed navbar */
-        main.container {
-            padding-top: 70px;
-            padding-bottom: 40px;
+        /* ACTIVE */
+        .navbar-nav .nav-link.active {
+            background: rgba(0, 188, 212, 0.25);
+            color: #00e5ff !important;
         }
 
-        /* Footer */
-        footer {
-            background-color: #000;
-            color: #aaa;
-            padding: 18px 0;
-            font-size: 0.9rem;
-            border-top: 1px solid #222;
+        /* ADMIN BUTTON */
+        .admin-btn {
+            border-radius: 20px;
+            padding: 6px 18px;
         }
 
-            footer a {
-                color: #00bcd4;
-                text-decoration: none;
-            }
-
-                footer a:hover {
-                    color: #fff;
-                    text-decoration: underline;
-                }
-
-            footer i {
-                transition: all 0.3s ease;
-            }
-
-                footer i:hover {
-                    color: #fff;
-                    transform: scale(1.1);
-                }
-
-        @@media (max-width: 768px) {
-            .navbar-brand {
-                font-size: 0.95rem;
-            }
-
-            .navbar-nav .nav-link {
-                padding: 6px 10px !important;
-                font-size: 1rem;
+        /* MOBILE FIX */
+        @@media (max-width: 991px) {
+            .navbar-nav {
+                margin-top: 15px;
+                background: rgba(2, 6, 23, 0.95);
+                padding: 15px;
+                border-radius: 14px;
             }
         }
+
+        body {
+            padding-top: 60px;
+        }
+
+        .glass-navbar {
+            padding: 10px 0;
+        }
+
+
     </style>
 </head>
 <body>
 
-    <!-- Navbar -->
-    <nav class="navbar navbar-expand-lg navbar-dark fixed-top">
+  
+
+
+    <nav class="navbar navbar-expand-lg navbar-dark fixed-top glass-navbar">
         <div class="container">
-            <a class="navbar-brand d-flex align-items-center" href="/">
-                <i class="fa fa-camera-retro me-2" style="color:#00bcd4;"></i>
-                Photography
+
+            <!-- BRAND -->
+            <a class="navbar-brand d-flex align-items-center fw-bold" href="/">
+                <i class="fa fa-camera-retro me-2 brand-icon"></i>
+                <span class="brand-text">Photography</span>
             </a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent"
-                    aria-controls="navbarContent" aria-expanded="false" aria-label="Toggle navigation">
+
+            <!-- TOGGLER -->
+            <button class="navbar-toggler border-0 shadow-none" type="button"
+                    data-bs-toggle="collapse" data-bs-target="#navbarContent">
                 <span class="navbar-toggler-icon"></span>
             </button>
 
+            <!-- MENU -->
             <div class="collapse navbar-collapse" id="navbarContent">
-                <ul class="navbar-nav ms-auto">
+                <ul class="navbar-nav ms-auto gap-lg-2">
+
                     <li class="nav-item">
-                        <a class="nav-link @(ViewContext.RouteData.Values["action"]?.ToString() == "Index" ? "active" : "")" href="/">
+                        <a class="nav-link nav-animate @(ViewContext.RouteData.Values["action"]?.ToString() == "Index" ? "active" : "")"
+                           href="/">
                             <i class="fa fa-home me-1"></i> Home
                         </a>
                     </li>
+
                     <li class="nav-item">
-                        <a class="nav-link @(ViewContext.RouteData.Values["action"]?.ToString() == "About" ? "active" : "")" href="/Home/About">
+                        <a class="nav-link nav-animate @(ViewContext.RouteData.Values["action"]?.ToString() == "About" ? "active" : "")"
+                           href="/Home/About">
                             <i class="fa fa-user me-1"></i> About
                         </a>
                     </li>
+
                     <li class="nav-item">
-                        <a class="nav-link @(ViewContext.RouteData.Values["action"]?.ToString() == "Contact" ? "active" : "")" href="/Home/Contact">
+                        <a class="nav-link nav-animate @(ViewContext.RouteData.Values["action"]?.ToString() == "Contact" ? "active" : "")"
+                           href="/Home/Contact">
                             <i class="fa fa-envelope me-1"></i> Contact
                         </a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link @(ViewContext.RouteData.Values["action"]?.ToString() == "Login" ? "active" : "")" href="/Admin/Login">
+
+                    <!-- ADMIN BUTTON -->
+                    <li class="nav-item ms-lg-3">
+                        <a class="btn btn-outline-info btn-sm admin-btn"
+                           href="/Admin/Login">
                             <i class="fa fa-user-shield me-1"></i> Admin
                         </a>
                     </li>
+
                 </ul>
             </div>
+
         </div>
     </nav>
 
