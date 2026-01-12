@@ -57,6 +57,13 @@ namespace PhotographyPortfolio.Controllers
                 });
             }
 
+            var lastVideo = _db.Videos
+        .OrderByDescending(v => v.CreatedAt)
+        .FirstOrDefault();
+
+            ViewBag.LastVideo = lastVideo;
+
+
             return View(models);
         }
 
@@ -77,6 +84,20 @@ namespace PhotographyPortfolio.Controllers
 
             ViewBag.CategoryName = category.Name;
             return View(photos);
+        }
+
+        public IActionResult CategoryVideos(int id)
+        {
+            var category = _db.Categories.FirstOrDefault(c => c.Id == id);
+            if (category == null) return NotFound();
+
+            var videos = _db.Videos
+                .Where(v => v.CategoryId == id)
+                .OrderByDescending(v => v.Id)
+                .ToList();
+
+            ViewBag.CategoryName = category.Name;
+            return View(videos);
         }
 
         // ✅ Details Page for Individual Photo

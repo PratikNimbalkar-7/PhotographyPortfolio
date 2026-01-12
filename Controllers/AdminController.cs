@@ -129,7 +129,7 @@ namespace PhotographyPortfolio.Controllers
 
             await _db.SaveChangesAsync();
             TempData["SuccessMessage"] = $"{added} photo(s) uploaded successfully!";
-            return RedirectToAction("Index");
+            return RedirectToAction("Create");
         }
 
 

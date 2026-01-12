@@ -41,7 +41,10 @@ namespace PhotographyPortfolio.Controllers
 
 
         [HttpPost]
-        public async Task<IActionResult> Create(VideoViewModel vm)
+
+        [RequestSizeLimit(52428800)] // 50 MB
+        [RequestFormLimits(MultipartBodyLengthLimit = 52428800)]
+        public async Task<IActionResult> Create([FromForm] VideoViewModel vm)
         {
             if (!ModelState.IsValid)
                 return Json(new { success = false, message = "Invalid data" });
@@ -67,8 +70,10 @@ namespace PhotographyPortfolio.Controllers
             string fileName = Guid.NewGuid() + Path.GetExtension(vm.VideoFile.FileName);
             string filePath = Path.Combine(folder, fileName);
 
-            using var stream = new FileStream(filePath, FileMode.Create);
-            await vm.VideoFile.CopyToAsync(stream);
+            using (var stream = new FileStream(filePath, FileMode.Create))
+            {
+                await vm.VideoFile.CopyToAsync(stream);
+            }
 
             var video = new Video
             {
@@ -82,7 +87,13 @@ namespace PhotographyPortfolio.Controllers
             _db.Videos.Add(video);
             await _db.SaveChangesAsync();
 
-            return Json(new { success = true, message = "Video uploaded successfully" });
+            return Json(new
+            {
+                success = true,
+                message = "  Video uploaded successfully "
+            });
+
+
         }
 
 
@@ -90,5 +101,10 @@ namespace PhotographyPortfolio.Controllers
 
     }
 }
+
+
+
+
+    
 
     
