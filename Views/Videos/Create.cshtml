@@ -81,9 +81,15 @@
             </div>
 
             <div class="modal-footer">
-                <button type="button" class="btn btn-success" data-bs-dismiss="modal">
+                @* <button type="button" class="btn btn-success" data-bs-dismiss="modal">
+                    OK
+                </button> *@
+
+                <button type="button" id="successOkBtn" class="btn btn-success">
                     OK
                 </button>
+
+
             </div>
         </div>
     </div>
@@ -95,16 +101,24 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
     <script>
+        var redirectUrl = ""; // ✅ MUST be global
 
-          $("#btnUpload").on("click", function () {
-            uploadVideo();
+        $(document).ready(function () {
+
+            $("#btnUpload").on("click", function () {
+                uploadVideo();
+            });
+
+            $("#successOkBtn").on("click", function () {
+                if (redirectUrl) {
+                    window.location.href = redirectUrl;
+                }
+            });
         });
 
         function uploadVideo() {
 
-            // Take whole form automatically
-            var form = document.getElementById("videoForm");
-            var formData = new FormData(form);
+            var formData = new FormData(document.getElementById("videoForm"));
 
             $.ajax({
                 url: '/Videos/Create',
@@ -112,37 +126,39 @@
                 data: formData,
                 processData: false,
                 contentType: false,
+
                 success: function (res) {
+                    console.log(res); // DEBUG
 
+                    if (res.success) {
 
-                   if (res.success) {
+                        redirectUrl = res.redirectUrl;
+                        $("#successMessage").text(res.message);
 
-                    $("#successMessage").text(res.message);
+                        var modal = new bootstrap.Modal(
+                            document.getElementById("uploadSuccessModal")
+                        );
+                        modal.show();
 
-                 //   ✅ Bootstrap 5 MODAL (CORRECT WAY)
-                    var modal = new bootstrap.Modal(
-                        document.getElementById('uploadSuccessModal')
-                    );
-                    modal.show();
-
-                    $("#videoForm")[0].reset();
-                    $("#result").html("");
-
-                } else {
-                    $("#result").html(
-                        "<span class='text-danger'>" + res.message + "</span>"
-                    );
-                }
-            },
-
-          
+                        $("#videoForm")[0].reset();
+                        $("#result").html("");
+                    }
+                    else {
+                        $("#result").html(
+                            "<span class='text-danger'>" + res.message + "</span>"
+                        );
+                    }
+                },
 
                 error: function () {
                     $("#result").html(
-                        "<span style='color:red'>Something went wrong</span>"
+                        "<span class='text-danger'>Something went wrong</span>"
                     );
                 }
             });
         }
     </script>
+
+
+
 }

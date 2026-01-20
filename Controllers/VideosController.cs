@@ -87,14 +87,27 @@ namespace PhotographyPortfolio.Controllers
             _db.Videos.Add(video);
             await _db.SaveChangesAsync();
 
+            //return Json(Index ,new
+            //{
+            //    success = true,
+            //    message = "  Video uploaded successfully "
+            //});
+
             return Json(new
             {
                 success = true,
-                message = "  Video uploaded successfully "
+                message = "Video uploaded successfully",
+                redirectUrl = Url.Action("Index", "videos")
             });
 
 
         }
+
+
+
+
+
+
 
 
 
@@ -105,6 +118,5 @@ namespace PhotographyPortfolio.Controllers
 
 
 
-    
 
-    
+

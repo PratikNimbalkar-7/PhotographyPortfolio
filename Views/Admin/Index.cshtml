@@ -125,17 +125,44 @@
             margin-bottom: 10px;
         }
 
-    }</style>
+    }
+
+    .fixed-search {
+    position: fixed;
+    top: 80px;
+    right: 20px;
+    z-index: 999;
+}
+
+
+
+    
+    </style>
 
 <div class="admin-header">
     <h3><i class="fa fa-images me-2"></i> Photos</h3>
     <div>
         <a class="btn btn-sm btn-success" href="/Admin/Create"><i class="fa fa-plus me-1"></i> Add Photo</a>
-        <a class="btn btn-sm btn-success" href="/Videos/Create"><i class="fa fa-plus me-1"></i> Add Video</a>
+        <a class="btn btn-sm btn-success" href="/Videos/Index"><i class="fa fa-plus me-1"></i> Add Video</a>
         <a class="btn btn-sm btn-secondary" href="/Admin/Categories"><i class="fa fa-list me-1"></i> Categories</a>
         <a class="btn btn-sm btn-danger" href="/Admin/Logout"><i class="fa fa-sign-out-alt me-1"></i> Logout</a>
     </div>
 </div>
+
+<div class="d-flex justify-content-end mb-3">
+    <form asp-action="Index" method="get" class="d-flex gap-2">
+        <input type="text"
+               name="search"
+               class="form-control form-control-sm"
+               placeholder="Search"
+               style="width:200px;" />
+
+        <button class="btn btn-sm btn-primary">
+            <i class="fa fa-search"></i>
+        </button>
+    </form>
+</div>
+
 
 <table class="table table-dark table-hover align-middle">
     <thead>

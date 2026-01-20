@@ -44,12 +44,44 @@ namespace PhotographyPortfolio.Controllers
             return RedirectToAction("Login");
         }
 
-        public async Task<IActionResult> Index()
+        //public async Task<IActionResult> Index()
+        //{
+        //    if (!IsLoggedIn) return RedirectToAction("Login");
+        //    var photos = await _db.Photos.Include(p => p.Category).OrderByDescending(p => p.CreatedAt).ToListAsync();
+        //    return View(photos);
+        //}
+
+        public async Task<IActionResult> Index(string search)
         {
-            if (!IsLoggedIn) return RedirectToAction("Login");
-            var photos = await _db.Photos.Include(p => p.Category).OrderByDescending(p => p.CreatedAt).ToListAsync();
+            // 1?? Your existing login check (UNCHANGED)
+            if (!IsLoggedIn)
+                return RedirectToAction("Login");
+
+            // 2?? Base query (DO NOT call ToListAsync yet)
+            var query = _db.Photos
+                .Include(p => p.Category)
+               // .OrderByDescending(p => p.CreatedAt)
+                .AsQueryable();
+
+            // 3?? ?? INCLUDE SEARCH LOGIC HERE (THIS IS THE PLACE)
+            if (!string.IsNullOrWhiteSpace(search))
+            {
+                search = search.Trim();
+
+                query = query.Where(p =>
+                    p.Title.Contains(search) ||
+                    p.Category.Name.Contains(search) ||
+                    p.Id.ToString() == search 
+                );
+            }
+
+            // 4?? Execute query (ONLY HERE)
+            var photos = await query.ToListAsync();
+
+            // 5?? Return view
             return View(photos);
         }
+
 
         public async Task<IActionResult> Create()
         {
