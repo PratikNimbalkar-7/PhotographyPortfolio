@@ -4,57 +4,38 @@
     ViewData["Title"] = "Photo Gallery";
 }
 
-
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
 
 <style>
+    :root {
+        --bg-main: #020617;
+        --bg-card: rgba(2, 6, 23, 0.75);
+        --accent: #38bdf8;
+        --text-main: #e5e7eb;
+        --text-muted: #94a3b8;
+    }
+
     body {
-        background: #0f172a;
-        color: #f1f5f9;
+        background: radial-gradient(circle at top, #020617, #000);
+        color: var(--text-main);
+        font-family: 'Poppins', sans-serif;
     }
 
-    .gallery-card {
-        background: #020617;
-        border-radius: 16px;
-        padding: 24px;
-        box-shadow: 0 20px 40px rgba(0,0,0,.4);
-        transition: transform .3s, box-shadow .3s;
-    }
-
-        .gallery-card:hover {
-            transform: translateY(-6px);
-            box-shadow: 0 30px 60px rgba(56,189,248,.15);
-        }
-
-    .preview-img,
-    .preview-video {
-        height: 280px;
-        object-fit: cover;
-        border-radius: 14px;
-        width: 100%;
-        cursor: pointer;
-    }
-
-    .category-title {
-        color: #38bdf8;
-        letter-spacing: 1px;
-    }
-
-    /* HEADER VIDEO */
+    /* ================= HERO VIDEO ================= */
     .header-video-wrapper {
         display: flex;
         justify-content: center;
-        margin-top: 30px;
+        margin: 60px 0 90px;
     }
 
     .header-video-box {
+        max-width: 1100px;
         width: 100%;
-        max-width: 1000px;
-        height: 350px;
-        border-radius: 20px;
+        height: 420px;
+        border-radius: 28px;
         overflow: hidden;
+        box-shadow: 0 50px 120px rgba(0,0,0,.85);
         position: relative;
-        background: #020617;
-        box-shadow: 0 25px 50px rgba(0,0,0,.6);
     }
 
         .header-video-box video {
@@ -65,193 +46,228 @@
 
     .video-overlay {
         position: absolute;
-        bottom: 0;
-        width: 100%;
-        padding: 18px;
-        background: linear-gradient(to top, rgba(0,0,0,.75), transparent);
-        color: #fff;
+        inset: 0;
+        background: linear-gradient(to top, rgba(0,0,0,.85), transparent);
+        display: flex;
+        align-items: flex-end;
+        padding: 35px;
     }
 
+        .video-overlay h2 {
+            font-size: 2rem;
+            font-weight: 600;
+        }
+
+    /* ================= GALLERY CARD ================= */
+    .gallery-card {
+        background: var(--bg-card);
+        backdrop-filter: blur(18px);
+        border-radius: 28px;
+        padding: 40px;
+        margin-bottom: 60px;
+        box-shadow: 0 40px 100px rgba(0,0,0,.6);
+        border: 1px solid rgba(255,255,255,.06);
+        transition: .45s ease;
+    }
+
+        .gallery-card:hover {
+            transform: translateY(-12px);
+        }
+
+    /* ================= CATEGORY ================= */
+    .category-title {
+        color: var(--accent);
+        font-weight: 600;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+    }
+
+    /* ================= QUOTE ================= */
+    .category-quote {
+        max-width: 700px;
+        margin: 10px auto 35px;
+        font-size: 1rem;
+        font-style: italic;
+        color: var(--text-muted);
+        line-height: 1.6;
+    }
+
+    /* ================= MEDIA ================= */
+    .preview-img,
+    .preview-video {
+        height: 280px;
+        width: 100%;
+        object-fit: cover;
+        border-radius: 22px;
+        cursor: pointer;
+        box-shadow: 0 25px 70px rgba(0,0,0,.7);
+        transition: .6s ease;
+    }
+
+        .preview-img:hover,
+        .preview-video:hover {
+            transform: scale(1.06);
+        }
+
+    /* ================= BUTTON ================= */
+    .btn {
+        border-radius: 999px;
+        padding: 8px 22px;
+        font-size: .8rem;
+    }
+
+    /* ================= LIGHTBOX ================= */
+    .lightbox {
+        position: fixed;
+        inset: 0;
+        background: rgba(0,0,0,.92);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 9999;
+    }
+
+        .lightbox img {
+            max-width: 90%;
+            max-height: 90%;
+            border-radius: 20px;
+        }
+
+    .close-btn {
+        position: absolute;
+        top: 30px;
+        right: 40px;
+        font-size: 42px;
+        cursor: pointer;
+    }
+
+    /* ================= MOBILE ================= */
     @@media (max-width: 768px) {
         .header-video-box {
-            max-width: 100%;
-            height: 220px;
-            border-radius: 14px;
+            height: 240px;
         }
     }
-
-    /* .header-video-box {
-        max-width: 1100px;
-        aspect-ratio: 16 / 9;
-        height: auto;
-    } */
-
-    .header-video-box video {
-        pointer-events: none;
-    }
-
 </style>
 
-<!-- ================= SCRIPTS ================= -->
-
-<script>
-    function openLightbox(src) {
-        document.getElementById("lightbox-img").src = src;
-        document.getElementById("lightbox").classList.remove("d-none");
-    }
-
-    function closeLightbox() {
-        document.getElementById("lightbox").classList.add("d-none");
-    }
-
-    // 🎥 GALLERY VIDEO HOVER PLAY
-    document.querySelectorAll(".preview-video").forEach(video => {
-        video.muted = true;
-
-        video.addEventListener("mouseenter", () => {
-            video.play();
-        });
-
-        video.addEventListener("mouseleave", () => {
-            video.pause();
-            video.currentTime = 0;
-        });
-    });
-</script>
-
-<!-- ================= HEADER : LAST UPLOADED VIDEO ================= -->
+<!-- ================= HEADER VIDEO ================= -->
 @if (ViewBag.LastVideo != null)
 {
     <div class="header-video-wrapper">
         <div class="header-video-box">
-            <video autoplay
-                   muted
-                   loop
-                   playsinline
-                   preload="auto"
-                   disablepictureinpicture
-                   controlslist="nodownload noplaybackrate">
+            <video autoplay muted loop playsinline>
                 <source src="/@ViewBag.LastVideo.VideoPath" type="video/mp4" />
             </video>
             <div class="video-overlay">
-                <h4>Latest Upload</h4>
+                <div>
+                    <h2>Latest Cinematic Work</h2>
+                    <p class="text-muted">Crafting moments into timeless stories</p>
+                </div>
             </div>
         </div>
     </div>
 }
 
-
-
-<div class="container py-5">
-
-    <h1 class="text-center fw-bold mb-5 category-title">
-        📸 Photo Gallery
-    </h1>
-
+<!-- ================= GALLERY ================= -->
+<div class="container pb-5">
     @if (Model != null && Model.Any())
     {
         foreach (var group in Model)
         {
-            <div class="row align-items-center mb-5 gallery-card">
+            <div class="gallery-card">
 
-                <!-- CATEGORY -->
-                <div class="col-12 text-center mb-4">
-                    <h3 class="fw-bold category-title">
-                        @group.Category.Name
-                    </h3>
+                <div class="text-center mb-4">
+                    <h3 class="category-title category-name">@group.Category.Name</h3>
+                    <p class="category-quote"></p>
                 </div>
 
-                <!-- PHOTO -->
-                <div class="col-md-4 text-center">
-                    @if (group.Photos.Any())
-                    {
-                        var photo = group.Photos.First();
+                <div class="row align-items-center">
+                    <div class="col-md-4 text-center mb-3">
+                        @if (group.Photos.Any())
+                        {
+                            var photo = group.Photos.First();
+                            <img src="@photo.ImagePath" class="preview-img"
+                                 onclick="openLightbox('@photo.ImagePath')" />
 
-                        <img src="@photo.ImagePath"
-                             class="preview-img mb-3"
-                             alt="@photo.Title"
-                             onclick="openLightbox('@photo.ImagePath')" />
+                            <a class="btn btn-outline-info mt-3"
+                               href="@Url.Action("CategoryPhotos", "Home", new { id = group.Category.Id })">
+                                View Photos
+                            </a>
+                        }
+                    </div>
 
-                        <a href="@Url.Action("CategoryPhotos", "Home", new { id = group.Category.Id })"
-                           class="btn btn-outline-info btn-sm">
-                            View All Photos
-                        </a>
-                    }
-                    else
-                    {
-                        <span class="text-muted">No photos</span>
-                    }
+                    <div class="col-md-4 text-center mb-3">
+                        @if (group.videos.Any())
+                        {
+                            var video = group.videos.First();
+                            <video class="preview-video" muted preload="metadata"
+                                   onmouseenter="this.play()"
+                                   onmouseleave="this.pause();this.currentTime=0;">
+                                <source src="/@video.VideoPath" type="video/mp4" />
+                            </video>
+
+                            <a class="btn btn-outline-warning mt-3"
+                               href="@Url.Action("CategoryVideos", "Home", new { id = group.Category.Id })">
+                                View Videos
+                            </a>
+                        }
+                    </div>
+
+                    <div class="col-md-4 text-center">
+                        <p class="text-muted small">
+                            Discover the complete <strong>@group.Category.Name</strong> visual story
+                        </p>
+                    </div>
                 </div>
-
-                <!-- VIDEO -->
-                <div class="col-md-4 text-center">
-                    @if (group.videos.Any())
-                    {
-                        var video = group.videos.First();
-
-                        <video class="preview-video mb-3"
-                               muted
-                               preload="metadata"
-                               onmouseenter="this.play()"
-                               onmouseleave="this.pause();this.currentTime=0;">
-                            <source src="/@video.VideoPath" type="video/mp4" />
-                        </video>
-
-                        <a href="@Url.Action("CategoryVideos", "Home", new { id = group.Category.Id })"
-                           class="btn btn-outline-warning btn-sm">
-                            View All Videos
-                        </a>
-                    }
-                    else
-                    {
-                        <span class="text-muted">No videos</span>
-                    }
-                </div>
-
-                <!-- DESCRIPTION -->
-                <div class="col-md-4 text-center">
-                    <p class="text-muted small">
-                        Explore full <strong>@group.Category.Name</strong> gallery
-                    </p>
-                </div>
-
             </div>
         }
     }
-    else
-    {
-        <div class="alert alert-warning text-center">
-            No categories found
-        </div>
-    }
-
 </div>
 
-
+<!-- ================= LIGHTBOX ================= -->
 <div id="lightbox" class="lightbox d-none">
     <span class="close-btn" onclick="closeLightbox()">×</span>
     <img id="lightbox-img" />
 </div>
 
-
+<!-- ================= SCRIPTS ================= -->
 <script>
     function openLightbox(src) {
         document.getElementById("lightbox-img").src = src;
         document.getElementById("lightbox").classList.remove("d-none");
-        document.getElementById("lightbox").classList.add("d-flex");
     }
-
     function closeLightbox() {
         document.getElementById("lightbox").classList.add("d-none");
-        document.getElementById("lightbox").classList.remove("d-flex");
     }
 
-      // VIDEO HOVER PLAY
-    document.querySelectorAll("video").forEach(v => {
-        v.muted = true;
-        v.addEventListener("mouseenter", () => v.play());
-        v.addEventListener("mouseleave", () => v.play());
+    /* ================= CATEGORY QUOTES ================= */
+    const quotes = {
+        "Candid": "Candid moments are the truest stories — unscripted, unfiltered, unforgettable.",
+        "Wedding": "Every wedding tells a love story, and every frame keeps it alive forever.",
+        "Pre Wedding": "Before the vows, before forever — just love, laughter, and promises.",
+        "Birthday": "A celebration of smiles, surprises, and memories worth reliving.",
+        "Baby Shoot": "Tiny moments, big love — memories that grow with time.",
+        "Engagement": "The beginning of forever, captured one emotion at a time."
+    };
 
+    document.querySelectorAll(".gallery-card").forEach(card => {
+        const name = card.querySelector(".category-name").innerText.trim();
+        const quoteBox = card.querySelector(".category-quote");
+        quoteBox.innerText = quotes[name] || "Moments fade, memories stay forever.";
     });
 
+    /* ================= SCROLL REVEAL ================= */
+    const observer = new IntersectionObserver(entries => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.style.opacity = 1;
+                entry.target.style.transform = "translateY(0)";
+            }
+        });
+    },{ threshold: 0.15 });
+
+    document.querySelectorAll(".gallery-card").forEach(card => {
+        card.style.opacity = 0;
+        card.style.transform = "translateY(40px)";
+        observer.observe(card);
+    });
 </script>

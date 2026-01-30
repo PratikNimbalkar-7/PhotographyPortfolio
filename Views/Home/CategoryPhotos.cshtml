@@ -1,176 +1,205 @@
 ﻿@model IEnumerable<PhotographyPortfolio.Models.Photo>
+
 @{
     ViewData["Title"] = ViewBag.CategoryName;
 }
 
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+
 <style>
+    :root {
+        --bg-main: #020617;
+        --bg-card: rgba(2,6,23,.75);
+        --accent: #38bdf8;
+        --text-main: #e5e7eb;
+        --text-muted: #94a3b8;
+    }
+
     body {
-        background-color: #0d0d0d;
-        color: #f5f5f5;
+        background: radial-gradient(circle at top, #020617, #000);
+        color: var(--text-main);
         font-family: 'Poppins', sans-serif;
     }
 
-    h2 {
-        color: #00bcd4;
+    /* ================= HEADER ================= */
+    .page-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 50px;
     }
 
-    .card {
-        background-color: #1a1a1a;
-        border: 1px solid #333;
-        transition: all 0.3s ease;
-    }
-
-        .card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 0 20px rgba(0, 188, 212, 0.4);
+        .page-header h2 {
+            color: var(--accent);
+            font-weight: 600;
         }
-
-        .card img {
-            border-bottom: 1px solid #333;
-            transition: transform 0.3s ease;
-            height: 220px;
-            object-fit: cover;
-            width: 100%;
-            cursor: pointer;
-        }
-
-            .card img:hover {
-                transform: scale(1.05);
-            }
 
     .btn-back {
-        background: linear-gradient(45deg, #00bcd4, #007bff);
-        color: white;
-        border: none;
-        padding: 8px 18px;
-        border-radius: 50px;
+        background: linear-gradient(135deg, #38bdf8, #2563eb);
+        color: #000;
+        padding: 8px 22px;
+        border-radius: 999px;
         text-decoration: none;
-        display: inline-block;
-        margin-bottom: 25px;
-        transition: all 0.3s ease;
+        font-size: .85rem;
+        transition: .3s;
     }
 
         .btn-back:hover {
-            transform: scale(1.05);
+            transform: scale(1.06);
         }
 
-    /* Lightbox Modal */
+    /* ================= PHOTO CARD ================= */
+    .photo-card {
+        background: var(--bg-card);
+        backdrop-filter: blur(16px);
+        border-radius: 22px;
+        overflow: hidden;
+        box-shadow: 0 30px 80px rgba(0,0,0,.7);
+        transition: all .45s ease;
+    }
+
+        .photo-card:hover {
+            transform: translateY(-12px);
+        }
+
+        .photo-card img {
+            width: 100%;
+            height: 260px;
+            object-fit: cover;
+            cursor: pointer;
+            transition: transform .6s ease;
+        }
+
+        .photo-card:hover img {
+            transform: scale(1.08);
+        }
+
+    .photo-title {
+        padding: 14px;
+        text-align: center;
+        color: var(--text-muted);
+        font-size: .9rem;
+    }
+
+    /* ================= MODAL ================= */
     .modal-content {
-        background-color: #000;
+        background: rgba(0,0,0,.95);
         border: none;
+        border-radius: 22px;
+        backdrop-filter: blur(16px);
+    }
+
+    .modal-body {
+        padding: 20px 20px 70px;
         text-align: center;
         position: relative;
     }
 
-    .modal-body {
-        position: relative;
-        padding: 0;
-    }
-
         .modal-body img {
-            max-height: 85vh;
-            width: auto;
-            border-radius: 10px;
+            max-height: 80vh;
+            max-width: 100%;
+            border-radius: 18px;
+            box-shadow: 0 40px 100px rgba(0,0,0,.9);
         }
 
-    /* Navigation Arrows */
-    .nav-btn {
-        position: absolute;
-        top: 50%;
-        transform: translateY(-50%);
-        background: rgba(0, 0, 0, 0.6);
-        border: none;
-        color: #00bcd4;
-        font-size: 2.5rem;
-        cursor: pointer;
-        padding: 8px 15px;
-        border-radius: 50%;
-        transition: all 0.3s ease;
-    }
-
-        .nav-btn:hover {
-            color: #fff;
-            background: rgba(0, 188, 212, 0.6);
-            transform: translateY(-50%) scale(1.1);
-        }
-
-    #prevBtn {
-        left: 5px;
-    }
-
-    #nextBtn {
-        right: 5px;
-    }
-
-    /* Title styling inside modal */
-    #modalTitle {
-        color: #00bcd4;
-        margin-top: 15px;
-    }
-
+    /* ================= CLOSE ================= */
     .btn-close-modal {
         position: absolute;
-        top: 15px;
-        right: 15px;
-        background: #dc3545;
-        color: white;
-        border: none;
+        top: 18px;
+        right: 18px;
+        width: 38px;
+        height: 38px;
         border-radius: 50%;
-        width: 35px;
-        height: 35px;
+        border: none;
+        background: #ef4444;
+        color: #fff;
         font-size: 1.2rem;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        transition: all 0.3s ease;
+        cursor: pointer;
+        z-index: 10;
     }
 
-        .btn-close-modal:hover {
-            background: #ff4d4d;
-            transform: scale(1.1);
+    /* ================= UNIQUE NAV BAR ================= */
+    .modal-nav {
+        position: absolute;
+        bottom: 18px;
+        left: 50%;
+        transform: translateX(-50%);
+        display: flex;
+        gap: 16px;
+        background: rgba(255,255,255,.08);
+        backdrop-filter: blur(14px);
+        padding: 10px 18px;
+        border-radius: 999px;
+        box-shadow: 0 15px 40px rgba(0,0,0,.6);
+    }
+
+        .modal-nav button {
+            border: none;
+            background: transparent;
+            color: var(--accent);
+            font-size: .85rem;
+            font-weight: 500;
+            padding: 6px 16px;
+            border-radius: 999px;
+            transition: .3s ease;
         }
+
+            .modal-nav button:hover {
+                background: var(--accent);
+                color: #000;
+            }
+
+    /* ================= TITLE ================= */
+    #modalTitle {
+        color: var(--accent);
+        margin-top: 15px;
+        font-weight: 500;
+    }
+
+    /* ================= ANIMATION ================= */
+    .photo-card {
+        opacity: 0;
+        transform: translateY(40px);
+    }
 </style>
 
 <div class="container py-5">
-    <div class="d-flex justify-content-between align-items-center mb-4">
-        <h2 class="fw-bold">@ViewBag.CategoryName</h2>
-        <a href="@Url.Action("Index", "Home")" class="btn-back">
-            <i class="fa fa-arrow-left me-2"></i> Back to Gallery
-        </a>
+    <div class="page-header">
+        <h2>@ViewBag.CategoryName</h2>
+        <a href="@Url.Action("Index", "Home")" class="btn-back">← Back</a>
     </div>
 
-    <div class="row" id="photoGallery">
+    <div class="row">
         @foreach (var p in Model)
         {
             <div class="col-sm-6 col-md-4 col-lg-3 mb-4">
-                <div class="card shadow-sm border-0 h-100">
+                <div class="photo-card">
                     <img src="@p.ImagePath"
-                         alt="@p.Title"
-                         class="card-img-top gallery-img"
+                         class="gallery-img"
                          data-title="@p.Title" />
-                    <div class="card-body text-center">
-                        <h5 class="fw-semibold">@p.Title</h5>
-                    </div>
+                    <div class="photo-title">@p.Title</div>
                 </div>
             </div>
         }
     </div>
 </div>
 
-<!-- Lightbox Modal -->
-<div class="modal fade" id="photoModal" tabindex="-1" aria-labelledby="photoModalLabel" aria-hidden="true">
+<!-- ================= MODAL ================= -->
+<div class="modal fade" id="photoModal" tabindex="-1">
     <div class="modal-dialog modal-dialog-centered modal-xl">
         <div class="modal-content">
-            <div class="modal-body position-relative">
-                <button type="button" class="btn-close-modal" data-bs-dismiss="modal" aria-label="Close">
-                    <i class="fa fa-times"></i>
-                </button>
-                <button id="prevBtn" class="nav-btn"><i class="fa fa-chevron-left"></i></button>
-                <img id="modalImage" src="" alt="" />
-                <button id="nextBtn" class="nav-btn"><i class="fa fa-chevron-right"></i></button>
+            <div class="modal-body">
+                <button class="btn-close-modal" data-bs-dismiss="modal">×</button>
+                <img id="modalImage" />
+
+                <!-- UNIQUE BUTTON BAR -->
+                <div class="modal-nav">
+                    <button id="prevBtn">◀ Previous</button>
+                    <button id="nextBtn">Next ▶</button>
+                </div>
             </div>
-            <div class="p-3 text-center">
-                <h5 id="modalTitle"></h5>
+            <div class="text-center pb-3">
+                <h6 id="modalTitle"></h6>
             </div>
         </div>
     </div>
@@ -178,17 +207,13 @@
 
 @section Scripts {
     <script>
-        const galleryImages = document.querySelectorAll(".gallery-img");
+        const images = document.querySelectorAll(".gallery-img");
         const modal = new bootstrap.Modal(document.getElementById("photoModal"));
         const modalImage = document.getElementById("modalImage");
         const modalTitle = document.getElementById("modalTitle");
-        const prevBtn = document.getElementById("prevBtn");
-        const nextBtn = document.getElementById("nextBtn");
-
         let currentIndex = 0;
 
-        // Open modal
-        galleryImages.forEach((img, index) => {
+        images.forEach((img, index) => {
             img.addEventListener("click", () => {
                 currentIndex = index;
                 showImage();
@@ -197,26 +222,37 @@
         });
 
         function showImage() {
-            const img = galleryImages[currentIndex];
-            modalImage.src = img.src;
-            modalTitle.textContent = img.getAttribute("data-title");
+            modalImage.src = images[currentIndex].src;
+            modalTitle.textContent = images[currentIndex].dataset.title;
         }
 
-        prevBtn.addEventListener("click", () => {
-            currentIndex = (currentIndex - 1 + galleryImages.length) % galleryImages.length;
+        document.getElementById("prevBtn").onclick = () => {
+            currentIndex = (currentIndex - 1 + images.length) % images.length;
             showImage();
-        });
+        };
 
-        nextBtn.addEventListener("click", () => {
-            currentIndex = (currentIndex + 1) % galleryImages.length;
+        document.getElementById("nextBtn").onclick = () => {
+            currentIndex = (currentIndex + 1) % images.length;
             showImage();
-        });
+        };
 
-        // Keyboard navigation
-        document.addEventListener("keydown", (e) => {
+        // Keyboard support
+        document.addEventListener("keydown", e => {
             if (!document.getElementById("photoModal").classList.contains("show")) return;
-            if (e.key === "ArrowRight") nextBtn.click();
-            if (e.key === "ArrowLeft") prevBtn.click();
+            if (e.key === "ArrowRight") document.getElementById("nextBtn").click();
+            if (e.key === "ArrowLeft") document.getElementById("prevBtn").click();
         });
+
+        // Scroll reveal
+        const observer = new IntersectionObserver(entries => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = 1;
+                    entry.target.style.transform = "translateY(0)";
+                }
+            });
+        }, { threshold: 0.15 });
+
+        document.querySelectorAll(".photo-card").forEach(card => observer.observe(card));
     </script>
 }
