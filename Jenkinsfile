@@ -1,6 +1,11 @@
 pipeline {
     agent any
 
+    tools {
+        jdk 'JDK'
+        sonarScanner 'SonarScanner'
+    }
+
     stages {
 
         stage('Checkout') {
@@ -11,7 +16,7 @@ pipeline {
 
         stage('Build') {
             steps {
-                echo "No build needed for this project"
+                echo "No build needed"
             }
         }
 
