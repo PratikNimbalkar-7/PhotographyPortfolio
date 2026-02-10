@@ -1,12 +1,8 @@
 pipeline {
     agent any
 
-    tools {
-        jdk 'JDK'
-    }
-
     environment {
-        SCANNER_HOME = tool 'SonarScanner'
+        SCANNER_HOME = tool('SonarScanner')
     }
 
     stages {
@@ -26,12 +22,12 @@ pipeline {
         stage('SonarQube Analysis') {
             steps {
                 withSonarQubeEnv('SonarQube') {
-                    bat '''
-"%SCANNER_HOME%\\bin\\sonar-scanner.bat" ^
--Dsonar.projectKey=PhotographyPortfolio ^
--Dsonar.sources=. ^
--Dsonar.host.url=http://localhost:9000
-'''
+                    bat """
+                    "%SCANNER_HOME%\\bin\\sonar-scanner.bat" ^
+                    -Dsonar.projectKey=PhotographyPortfolio ^
+                    -Dsonar.sources=. ^
+                    -Dsonar.host.url=http://localhost:9000
+                    """
                 }
             }
         }
