@@ -3,7 +3,7 @@ pipeline {
 
     tools {
         jdk 'JDK'
-        sonarScanner 'SonarScanner'
+        sonarRunner 'SonarScanner'
     }
 
     stages {
