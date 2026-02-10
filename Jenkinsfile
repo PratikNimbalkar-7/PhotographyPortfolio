@@ -3,7 +3,6 @@ pipeline {
 
     tools {
         jdk 'JDK'
-        sonarRunner 'SonarScanner'
     }
 
     stages {
@@ -16,7 +15,7 @@ pipeline {
 
         stage('Build') {
             steps {
-                echo "No build needed"
+                echo "No build needed for this project"
             }
         }
 
