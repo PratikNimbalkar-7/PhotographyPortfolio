@@ -5,6 +5,10 @@ pipeline {
         jdk 'JDK'
     }
 
+    environment {
+        SCANNER_HOME = tool 'SonarScanner'
+    }
+
     stages {
 
         stage('Checkout') {
@@ -15,7 +19,7 @@ pipeline {
 
         stage('Build') {
             steps {
-                echo "No build needed for this project"
+                echo "No build needed"
             }
         }
 
@@ -23,7 +27,7 @@ pipeline {
             steps {
                 withSonarQubeEnv('SonarQube') {
                     bat '''
-"C:\\ProgramData\\Jenkins\\.jenkins\\tools\\hudson.plugins.sonar.SonarRunnerInstallation\\SonarScanner\\bin\\sonar-scanner.bat" ^
+"%SCANNER_HOME%\\bin\\sonar-scanner.bat" ^
 -Dsonar.projectKey=PhotographyPortfolio ^
 -Dsonar.sources=. ^
 -Dsonar.host.url=http://localhost:9000
