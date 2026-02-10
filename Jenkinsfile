@@ -17,7 +17,7 @@ pipeline {
 
         stage('SonarQube Analysis') {
             steps {
-                withSonarQubeEnv('SonarServer') {
+                withSonarQubeEnv('SonarQube') {
                     bat '''
                     sonar-scanner ^
                     -Dsonar.projectKey=PhotographyPortfolio ^
