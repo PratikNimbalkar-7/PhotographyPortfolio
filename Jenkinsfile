@@ -3,6 +3,7 @@ pipeline {
 
     tools {
         maven 'Maven3'
+        jdk 'JDK17'
     }
 
     stages {
@@ -15,14 +16,14 @@ pipeline {
 
         stage('Build') {
             steps {
-                bat 'mvn clean compile'
+                bat '"%MAVEN_HOME%\\bin\\mvn" clean compile'
             }
         }
 
         stage('SonarQube Analysis') {
             steps {
                 withSonarQubeEnv('SonarServer') {
-                    bat 'mvn sonar:sonar'
+                    bat '"%MAVEN_HOME%\\bin\\mvn" sonar:sonar'
                 }
             }
         }
