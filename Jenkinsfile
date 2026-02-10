@@ -23,11 +23,11 @@ pipeline {
             steps {
                 withSonarQubeEnv('SonarQube') {
                     bat '''
-                    sonar-scanner ^
-                    -Dsonar.projectKey=PhotographyPortfolio ^
-                    -Dsonar.sources=. ^
-                    -Dsonar.host.url=http://localhost:9000
-                    '''
+"C:\\ProgramData\\Jenkins\\.jenkins\\tools\\hudson.plugins.sonar.SonarRunnerInstallation\\SonarScanner\\bin\\sonar-scanner.bat" ^
+-Dsonar.projectKey=PhotographyPortfolio ^
+-Dsonar.sources=. ^
+-Dsonar.host.url=http://localhost:9000
+'''
                 }
             }
         }
