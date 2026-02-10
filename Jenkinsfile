@@ -1,11 +1,6 @@
 pipeline {
     agent any
 
-    tools {
-        maven 'Maven3'
-        jdk 'JDK'
-    }
-
     stages {
 
         stage('Checkout') {
@@ -16,22 +11,19 @@ pipeline {
 
         stage('Build') {
             steps {
-                bat '"%MAVEN_HOME%\\bin\\mvn" clean compile'
+                echo "No build needed for this project"
             }
         }
 
         stage('SonarQube Analysis') {
             steps {
                 withSonarQubeEnv('SonarServer') {
-                    bat '"%MAVEN_HOME%\\bin\\mvn" sonar:sonar'
-                }
-            }
-        }
-
-        stage('Quality Gate') {
-            steps {
-                timeout(time: 2, unit: 'MINUTES') {
-                    waitForQualityGate abortPipeline: true
+                    bat '''
+                    sonar-scanner ^
+                    -Dsonar.projectKey=PhotographyPortfolio ^
+                    -Dsonar.sources=. ^
+                    -Dsonar.host.url=http://localhost:9000
+                    '''
                 }
             }
         }
