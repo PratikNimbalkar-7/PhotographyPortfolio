@@ -26,7 +26,8 @@ pipeline {
                     "%SCANNER_HOME%\\bin\\sonar-scanner.bat" ^
                     -Dsonar.projectKey=PhotographyPortfolio ^
                     -Dsonar.sources=. ^
-                    -Dsonar.host.url=http://localhost:9000
+                    -Dsonar.host.url=http://localhost:9000 ^
+                    -Dsonar.branch.name=%BRANCH_NAME%
                     """
                 }
             }
