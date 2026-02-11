@@ -1,37 +1,34 @@
 pipeline {
-    agent any
-
-    environment {
-        SCANNER_HOME = tool('SonarScanner')
-        PROJECT_KEY = "PhotographyPortfolio-${env.BRANCH_NAME}"
-    }
-
-    stages {
-
-        stage('Checkout') {
-            steps {
-                checkout scm
-            }
-        }
-
-        stage('Build') {
-            steps {
-                echo "No build needed"
-            }
-        }
-
-        stage('SonarQube Analysis') {
-            steps {
-                withSonarQubeEnv('SonarQube') {
-                    bat """
-                    "%SCANNER_HOME%\\bin\\sonar-scanner.bat" ^
-                    -Dsonar.projectKey=%PROJECT_KEY% ^
-                    -Dsonar.projectName=%PROJECT_KEY% ^
-                    -Dsonar.sources=. ^
-                    -Dsonar.host.url=http://localhost:9000
-                    """
-                }
-            }
-        }
-    }
-}
+			    agent any
+			    stages {
+			        stage('Build') {
+			            steps {
+			                echo 'Building...'
+			            }
+			        }
+			        stage('SonarQube Analysis') {
+			            steps {
+			                script {
+			                    // Assign tool inside script block
+			                    def scannerHome = tool 'SonarScanner for MSBuild'
+			                    // Use withSonarQubeEnv inside script block
+			                    withSonarQubeEnv('MySonarQube') {
+			                        bat "\"${scannerHome}\\SonarScanner.MSBuild.exe\" begin /k:\"WebAppDemo\""
+			                        bat "dotnet build"
+			                        bat "\"${scannerHome}\\SonarScanner.MSBuild.exe\" end"
+			                    }
+			                }
+			            }
+			        }
+			        stage('Test') {
+			            steps {
+			                echo 'Testing...'
+			            }
+			        }
+			        stage('Deploy') {
+			            steps {
+			                echo 'Deploying...'
+			            }
+			        }
+			    }
+			}
