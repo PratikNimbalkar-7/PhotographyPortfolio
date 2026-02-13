@@ -1,0 +1,34 @@
+name: .NET CI Pipeline
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build-test:
+    runs-on: windows-latest
+
+    steps:
+    # 1. Checkout Code
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    # 2. Setup .NET
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: '8.0.x'
+
+    # 3. Restore Dependencies
+    - name: Restore
+      run: dotnet restore
+
+    # 4. Build Project
+    - name: Build
+      run: dotnet build --no-restore --configuration Release
+
+    # 5. Run Tests
+    - name: Test
+      run: dotnet test --no-build --configuration Release
