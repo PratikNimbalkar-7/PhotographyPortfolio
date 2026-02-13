@@ -2,15 +2,19 @@ name: .NET CI Pipeline
 
 on:
   push:
-    branches: [ "master" ]
+    branches:
+      - "**"        # Run on every branch
   pull_request:
-    branches: [ "master" ]
+    branches:
+      - "master"
+  workflow_dispatch:
 
 jobs:
   build-test:
     runs-on: windows-latest
 
     steps:
+
     # 1. Checkout Code
     - name: Checkout repository
       uses: actions/checkout@v4
