@@ -33,16 +33,16 @@ jobs:
       run: dotnet test --no-build --configuration Release
 
     # 🔥 Trigger Jenkins After Success
-   - name: Trigger Jenkins Pipeline
-  if: success()
-  shell: powershell
-  run: |
-    $jenkinsUrl = "${{ secrets.JENKINS_URL }}"
-    $job = "${{ secrets.JENKINS_JOB }}"
-    $token = "${{ secrets.JENKINS_TRIGGER_TOKEN }}"
+    - name: Trigger Jenkins Pipeline
+      if: success()
+      shell: powershell
+      run: |
+        $jenkinsUrl = "${{ secrets.JENKINS_URL }}"
+        $job = "${{ secrets.JENKINS_JOB }}"
+        $token = "${{ secrets.JENKINS_TRIGGER_TOKEN }}"
 
-    $url = "$jenkinsUrl/job/$job/build?token=$token"
+        $url = "$jenkinsUrl/job/$job/build?token=$token"
 
-    Write-Host "Calling Jenkins: $url"
+        Write-Host "Calling Jenkins: $url"
 
-    Invoke-WebRequest -Uri $url -Method Post -UseBasicParsing
+        Invoke-WebRequest -Uri $url -Method Post -UseBasicParsing
