@@ -3,7 +3,7 @@ name: .NET CI Pipeline
 on:
   push:
     branches:
-      - "**"        # Run on every branch
+      - "**"
   pull_request:
     branches:
       - "master"
@@ -15,24 +15,25 @@ jobs:
 
     steps:
 
-    # 1. Checkout Code
     - name: Checkout repository
       uses: actions/checkout@v4
 
-    # 2. Setup .NET
     - name: Setup .NET
       uses: actions/setup-dotnet@v4
       with:
         dotnet-version: '8.0.x'
 
-    # 3. Restore Dependencies
     - name: Restore
       run: dotnet restore
 
-    # 4. Build Project
     - name: Build
       run: dotnet build --no-restore --configuration Release
 
-    # 5. Run Tests
     - name: Test
       run: dotnet test --no-build --configuration Release
+
+    # 🔥 Trigger Jenkins After Success
+    - name: Trigger Jenkins Pipeline
+      if: success()
+      run: |
+        curl -X POST "${{ secrets.JENKINS_URL }}/job/${{ secrets.JENKINS_JOB }}/build?token=${{ secrets.JENKINS_TRIGGER_TOKEN }}"
